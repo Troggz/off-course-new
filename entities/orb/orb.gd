@@ -38,16 +38,31 @@ func _physics_process(_delta: float) -> void:
 	last_velocity = linear_velocity
 
 
+static var _debug_bounce_count := 0
+const _DEBUG_BOUNCE_MAX := 25
 func _on_body_shape_entered(_body_rid: RID, body: Node, _body_shape_index: int, _local_shape_index: int) -> void:
 	if body is TileMapLayer or body is StaticBody2D or body is RigidBody2D:
+		var speed_before := last_velocity.length()
+		var speed_at_contact := linear_velocity.length()
 		bounce(linear_velocity.normalized(), last_velocity)
+		if _debug_bounce_count < _DEBUG_BOUNCE_MAX:
+			_debug_bounce_count += 1
+			var speed_after := linear_velocity.length()
+			print("[", _debug_bounce_count, "/", _DEBUG_BOUNCE_MAX, "] [f", Engine.get_physics_frames(), "] BOUNCE on ", body.name,
+				"  speed: last=", "%.1f" % speed_before,
+				" atContact=", "%.1f" % speed_at_contact,
+				" after=", "%.1f" % speed_after,
+				"  kept=", "%.0f" % (speed_after / max(speed_before, 0.001) * 100.0), "%")
 
 
 func bounce(normal: Vector2, incidence: Vector2) -> void:
 	$BounceAudio.play()
-	if normal.dot(incidence) < 0.0:
-		linear_velocity = incidence.bounce(normal)
-		position += linear_velocity / 120.0
+	# --- OLD custom bounce (velocity override) DISABLED ---
+	# Now relying on Godot's built-in restitution: PhysicsMaterial bounce=0.8 in orb.tscn.
+	# To restore the old system: uncomment the 3 lines below AND set that material's bounce back to 1.0.
+	#if normal.dot(incidence) < 0.0:
+		#linear_velocity = incidence.bounce(normal)
+		#position += linear_velocity / 120.0
 
 
 func gravitate(exclusions: Array = []) -> Vector2:

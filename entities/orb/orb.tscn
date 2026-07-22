@@ -6,7 +6,8 @@
 [ext_resource type="AudioStream" uid="uid://d3olnmo84qmhm" path="res://entities/orb/orbit.wav" id="4_b6827"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_h8qx5"]
-bounce = 1.0
+friction = 0.0
+bounce = 0.8
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ulscp"]
 atlas = ExtResource("2_h8qx5")
@@ -67,7 +68,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_yqh0o")
 }],
-"loop": true,
+"loop": 1,
 "name": &"default",
 "speed": 8.0
 }]

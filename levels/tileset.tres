@@ -3,7 +3,8 @@
 [ext_resource type="Texture2D" uid="uid://cu38sehor2tfu" path="res://levels/tileset.png" id="1_bt6on"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_be4ft"]
-bounce = 1.0
+friction = 0.0
+bounce = 0.1
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_c651c"]
 texture = ExtResource("1_bt6on")
