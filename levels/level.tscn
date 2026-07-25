@@ -64,7 +64,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_0qmeg")
 }],
-"loop": true,
+"loop": 1,
 "name": &"0",
 "speed": 5.0
 }, {
@@ -72,7 +72,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_ta7ci")
 }],
-"loop": true,
+"loop": 1,
 "name": &"1",
 "speed": 5.0
 }, {
@@ -80,7 +80,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_lh335")
 }],
-"loop": true,
+"loop": 1,
 "name": &"2",
 "speed": 5.0
 }, {
@@ -88,7 +88,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_u6cys")
 }],
-"loop": true,
+"loop": 1,
 "name": &"3",
 "speed": 5.0
 }, {
@@ -96,7 +96,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_368ro")
 }],
-"loop": true,
+"loop": 1,
 "name": &"4",
 "speed": 5.0
 }, {
@@ -104,7 +104,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_3ca7f")
 }],
-"loop": true,
+"loop": 1,
 "name": &"5",
 "speed": 5.0
 }, {
@@ -112,7 +112,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_kogck")
 }],
-"loop": true,
+"loop": 1,
 "name": &"6",
 "speed": 5.0
 }, {
@@ -120,7 +120,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_574oa")
 }],
-"loop": true,
+"loop": 1,
 "name": &"7",
 "speed": 5.0
 }, {
@@ -128,7 +128,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_tn76l")
 }],
-"loop": true,
+"loop": 1,
 "name": &"8",
 "speed": 5.0
 }]
@@ -147,7 +147,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_mxp4k")
 }],
-"loop": true,
+"loop": 1,
 "name": &"default",
 "speed": 5.0
 }, {
@@ -155,7 +155,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_d7v53")
 }],
-"loop": true,
+"loop": 1,
 "name": &"pressed",
 "speed": 5.0
 }]
@@ -256,7 +256,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_ia6v6")
 }],
-"loop": false,
+"loop": 0,
 "name": &"close",
 "speed": 18.0
 }, {
@@ -285,7 +285,7 @@ animations = [{
 "duration": 1.0,
 "texture": null
 }],
-"loop": false,
+"loop": 0,
 "name": &"open",
 "speed": 18.0
 }]
