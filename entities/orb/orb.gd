@@ -45,14 +45,14 @@ func _on_body_shape_entered(_body_rid: RID, body: Node, _body_shape_index: int, 
 		var speed_before := last_velocity.length()
 		var speed_at_contact := linear_velocity.length()
 		bounce(linear_velocity.normalized(), last_velocity)
-		if _debug_bounce_count < _DEBUG_BOUNCE_MAX:
-			_debug_bounce_count += 1
-			var speed_after := linear_velocity.length()
-			print("[", _debug_bounce_count, "/", _DEBUG_BOUNCE_MAX, "] [f", Engine.get_physics_frames(), "] BOUNCE on ", body.name,
-				"  speed: last=", "%.1f" % speed_before,
-				" atContact=", "%.1f" % speed_at_contact,
-				" after=", "%.1f" % speed_after,
-				"  kept=", "%.0f" % (speed_after / max(speed_before, 0.001) * 100.0), "%")
+		#if _debug_bounce_count < _DEBUG_BOUNCE_MAX:
+			#_debug_bounce_count += 1
+			#var speed_after := linear_velocity.length()
+			#print("[", _debug_bounce_count, "/", _DEBUG_BOUNCE_MAX, "] [f", Engine.get_physics_frames(), "] BOUNCE on ", body.name,
+				#"  speed: last=", "%.1f" % speed_before,
+				#" atContact=", "%.1f" % speed_at_contact,
+				#" after=", "%.1f" % speed_after,
+				#"  kept=", "%.0f" % (speed_after / max(speed_before, 0.001) * 100.0), "%")
 
 
 func bounce(normal: Vector2, incidence: Vector2) -> void:

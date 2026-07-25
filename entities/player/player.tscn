@@ -9,6 +9,7 @@
 [ext_resource type="Texture2D" uid="uid://dj45pvpacwsv7" path="res://entities/player/bubble_front.png" id="4_fkugw"]
 [ext_resource type="Texture2D" uid="uid://dcrcecryobrox" path="res://entities/player/lupin_the_3rd.png" id="6_26q78"]
 [ext_resource type="AudioStream" uid="uid://c28lsegwqbdun" path="res://entities/player/death.wav" id="7_qiwj3"]
+[ext_resource type="Script" uid="uid://bm38cawx7ijxp" path="res://entities/player/raycast_danger.gd" id="9_a1qjk"]
 [ext_resource type="AudioStream" uid="uid://c7tkk5uuhunm" path="res://entities/player/latch.wav" id="9_wvtmh"]
 [ext_resource type="AudioStream" uid="uid://do3erdk6b4o7s" path="res://entities/player/delatch.wav" id="10_7thud"]
 
@@ -213,6 +214,7 @@ unlatching_boost = 1.1
 unlatching_time = 2.0
 arcs = 12
 arc_divisions = 8
+invulnerable_time = 3.0
 radius = 8.0
 
 [node name="Sprite" parent="." index="0" unique_id=139438059]
@@ -274,12 +276,17 @@ active = false
 radius = 8.0
 
 [node name="DangerArea" type="Area2D" parent="." index="4" unique_id=409287025]
-visible = false
 collision_layer = 2
 collision_mask = 2
+script = ExtResource("9_a1qjk")
 
 [node name="CollisionShape" type="CollisionShape2D" parent="DangerArea" index="0" unique_id=1271870757]
+visible = false
 shape = SubResource("CircleShape2D_8fjmc")
+
+[node name="RayCast2D" type="RayCast2D" parent="DangerArea" index="1" unique_id=743497495]
+target_position = Vector2(9, 0)
+collision_mask = 2
 
 [node name="DeathAudio" type="AudioStreamPlayer2D" parent="." index="5" unique_id=614020021]
 stream = ExtResource("7_qiwj3")

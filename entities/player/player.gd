@@ -11,6 +11,8 @@ extends Orb
 @export var arcs: int = 12
 @export var arc_divisions: int = 8
 
+@export var invulnerable_time: float = 3
+
 @onready var trajectory_probe: Orb = $TrajectoryProbe
 
 var unlatched_trajlines := []
@@ -18,6 +20,7 @@ var latched_trajlines := []
 var latched := false
 var dead := false
 
+var invulnerable := false
 
 func _ready() -> void:
 	if Global.lupin == 3:
@@ -32,6 +35,7 @@ func _ready() -> void:
 
 var latch_time := 0.0
 func _process(delta: float) -> void:
+	
 	super (delta)
 	handle_rotation(delta)
 
@@ -222,10 +226,18 @@ func do_death() -> void:
 
 	$DeathAudio.play()
 
+func raycast_trigger(coords: Vector2) -> void:
+	var direction = (Vector2.ZERO - coords).normalized()
+	linear_velocity = direction * (linear_velocity * 2)
+	print("invulnerable")
+	await get_tree().create_timer(invulnerable_time).timeout
+	invulnerable = false
+	print("vulnerable")
 
 func _on_danger_body_enter(_body: Node2D) -> void:
-	if not dead:
-		die.emit()
+	#if not dead:
+		#die.emit()
+	pass
 
 
 func _on_death_audio_finished() -> void:
