@@ -1,0 +1,68 @@
+[gd_scene format=3 uid="uid://bnis4cd1e1kfr"]
+
+[ext_resource type="Script" uid="uid://kw104rxxefxv" path="res://entities/popup_panel/canvas_layer.gd" id="1_3y6q4"]
+[ext_resource type="VideoStream" uid="uid://505llyowaoba" path="res://entities/popup_panel/2026-04-17-15-36-09.ogv" id="1_5rn1p"]
+[ext_resource type="Script" uid="uid://8tbabwaxooox" path="res://entities/popup_panel/panel.gd" id="1_c3mp2"]
+[ext_resource type="Script" uid="uid://d7up3pprl3ku" path="res://entities/popup_panel/area_2d.gd" id="1_dahr0"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_bjqgx"]
+size = Vector2(34, 36)
+
+[node name="PopUpPanel" type="Control" unique_id=257614307]
+process_mode = 3
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_c3mp2")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=179906356]
+layer = 10
+script = ExtResource("1_3y6q4")
+
+[node name="Backdrop" type="ColorRect" parent="CanvasLayer" unique_id=397276275]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.5)
+
+[node name="Frame" type="Panel" parent="CanvasLayer" unique_id=719545235]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -164.0
+offset_top = -94.0
+offset_right = 164.0
+offset_bottom = 94.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VideoStreamPlayer" type="VideoStreamPlayer" parent="CanvasLayer" unique_id=322455493]
+texture_filter = 2
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -160.0
+offset_top = -90.0
+offset_right = 160.0
+offset_bottom = 90.0
+grow_horizontal = 2
+grow_vertical = 2
+stream = ExtResource("1_5rn1p")
+expand = true
+
+[node name="Area2D" type="Area2D" parent="." unique_id=1253368264]
+script = ExtResource("1_dahr0")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=1532100315]
+shape = SubResource("RectangleShape2D_bjqgx")
+
+[connection signal="body_entered" from="Area2D" to="Area2D" method="_on_body_entered"]

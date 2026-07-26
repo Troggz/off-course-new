@@ -15,6 +15,7 @@
 [ext_resource type="Texture2D" uid="uid://h23juck7fdud" path="res://levels/dialogue.png" id="13_2nijd"]
 [ext_resource type="Shader" uid="uid://c4kghet2pushk" path="res://levels/cutout.gdshader" id="14_2ugn6"]
 [ext_resource type="Texture2D" uid="uid://ce87nkgmd0um4" path="res://levels/transition.png" id="15_3xm22"]
+[ext_resource type="PackedScene" uid="uid://bnis4cd1e1kfr" path="res://entities/popup_panel/panel.tscn" id="16_panwl"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_hjsbj"]
 size = Vector2(96, 96)
@@ -513,6 +514,17 @@ autoplay = "open"
 frame = 7
 frame_progress = 1.0
 metadata/_edit_lock_ = true
+
+[node name="PopUpPanel" parent="." unique_id=257614307 instance=ExtResource("16_panwl")]
+anchors_preset = 0
+anchor_right = 0.0
+anchor_bottom = 0.0
+offset_left = 130.0
+offset_top = 142.0
+offset_right = 130.0
+offset_bottom = 142.0
+grow_horizontal = 1
+grow_vertical = 1
 
 [connection signal="timeout" from="EntranceDoor/Timer" to="." method="_on_entrance_timeout"]
 [connection signal="timeout" from="PlayerSpawn/Timer" to="." method="_on_spawn_timer_timeout"]
