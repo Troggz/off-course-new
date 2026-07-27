@@ -15,7 +15,7 @@ compatibility/default_parent_skeleton_in_mesh_instance_3d=true
 [application]
 
 config/name="Off Course!"
-run/main_scene="uid://c5elde1l5hneb"
+run/main_scene="uid://brdcn0iul5wh"
 config/features=PackedStringArray("4.6", "GL Compatibility")
 boot_splash/bg_color=Color(0, 0, 0, 1)
 config/icon="res://icon.svg"

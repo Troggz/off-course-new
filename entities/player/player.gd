@@ -11,7 +11,14 @@ extends Orb
 @export var arcs: int = 12
 @export var arc_divisions: int = 8
 
-@export var invulnerable_time: float = 3
+# Related to hurtbox
+@export var invulnerable_time: float = 3 # Invulnerability time in seconds
+@export var hurt_radius: float = 9 # Length of the raycast
+@export var point_count: int = 16 # Precision of the raycast, more points = more precise redirection (but potentially more buggy)
+@export var NWSE: bool = false # Determines whether the player can be redirected in true north, west, etc.
+# Set "NWSE" to false if "point_count" = 4
+@export var lives: int = 3
+@export var reaction_multiplier = 1.5 # Bigger multi = Bigger reaction to hits
 
 @onready var trajectory_probe: Orb = $TrajectoryProbe
 
@@ -226,18 +233,10 @@ func do_death() -> void:
 
 	$DeathAudio.play()
 
-func raycast_trigger(coords: Vector2) -> void:
-	var direction = (Vector2.ZERO - coords).normalized()
-	linear_velocity = direction * (linear_velocity * 2)
-	print("invulnerable")
-	await get_tree().create_timer(invulnerable_time).timeout
-	invulnerable = false
-	print("vulnerable")
-
-func _on_danger_body_enter(_body: Node2D) -> void:
-	#if not dead:
-		#die.emit()
-	pass
+#func _on_danger_body_enter(_body: Node2D) -> void:
+	##if not dead:
+		##die.emit()
+	#pass
 
 
 func _on_death_audio_finished() -> void:
