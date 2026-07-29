@@ -12,8 +12,9 @@
 [ext_resource type="Script" uid="uid://bm38cawx7ijxp" path="res://entities/player/raycast_danger.gd" id="9_a1qjk"]
 [ext_resource type="AudioStream" uid="uid://c7tkk5uuhunm" path="res://entities/player/latch.wav" id="9_wvtmh"]
 [ext_resource type="AudioStream" uid="uid://do3erdk6b4o7s" path="res://entities/player/delatch.wav" id="10_7thud"]
+[ext_resource type="Texture2D" uid="uid://bcp02lf8w74i6" path="res://icon.svg" id="13_j3ovn"]
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_a1qjk"]
+[sub_resource type="CircleShape2D" id="CircleShape2D_j3ovn"]
 resource_local_to_scene = true
 radius = 12.0
 
@@ -56,7 +57,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_221hk")
 }],
-"loop": true,
+"loop": 1,
 "name": &"default",
 "speed": 5.0
 }, {
@@ -67,7 +68,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_t1t22")
 }],
-"loop": true,
+"loop": 1,
 "name": &"third",
 "speed": 5.0
 }]
@@ -142,7 +143,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_8fjmc")
 }],
-"loop": true,
+"loop": 1,
 "name": &"default",
 "speed": 5.0
 }, {
@@ -192,7 +193,7 @@ animations = [{
 "duration": 1.0,
 "texture": null
 }],
-"loop": false,
+"loop": 0,
 "name": &"pop",
 "speed": 18.0
 }]
@@ -220,6 +221,11 @@ point_count = 16
 NWSE = false
 lives = 3
 reaction_multiplier = 1.5
+dash_type = 2
+dash_multiplier = 2.0
+dash_cooldown = 3.0
+dash_orbit_time = 3.0
+dash_slow_multiplier = 0.25
 radius = 8.0
 
 [node name="Sprite" parent="." index="0" unique_id=139438059]
@@ -227,7 +233,7 @@ visible = false
 
 [node name="CollisionShape" parent="." index="1" unique_id=806147550]
 visible = false
-shape = SubResource("CircleShape2D_a1qjk")
+shape = SubResource("CircleShape2D_j3ovn")
 
 [node name="Sprites" type="Node2D" parent="." index="2" unique_id=1297508990]
 
@@ -258,17 +264,31 @@ initial_velocity_min = 20.0
 initial_velocity_max = 20.61
 color_ramp = SubResource("Gradient_a1qjk")
 
-[node name="Back" type="Sprite2D" parent="Sprites" index="2" unique_id=1278749285]
+[node name="BoostSmoke" type="CPUParticles2D" parent="Sprites" index="2" unique_id=1727689555]
+emitting = false
+texture = ExtResource("4_a1qjk")
+lifetime = 0.25
+one_shot = true
+explosiveness = 0.3
+direction = Vector2(-1, 0)
+spread = 30.0
+gravity = Vector2(0, 0)
+initial_velocity_min = 20.0
+initial_velocity_max = 20.61
+color = Color(0, 0.8963526, 0.8963524, 1)
+color_ramp = SubResource("Gradient_a1qjk")
+
+[node name="Back" type="Sprite2D" parent="Sprites" index="3" unique_id=1278749285]
 material = SubResource("ShaderMaterial_a1qjk")
 texture = ExtResource("3_bls4j")
 
-[node name="Lupin" type="AnimatedSprite2D" parent="Sprites" index="3" unique_id=1761124449]
+[node name="Lupin" type="AnimatedSprite2D" parent="Sprites" index="4" unique_id=1761124449]
 material = SubResource("ShaderMaterial_j3ovn")
 sprite_frames = SubResource("SpriteFrames_ghoj8")
 autoplay = "default"
 flip_h = true
 
-[node name="Front" type="AnimatedSprite2D" parent="Sprites" index="4" unique_id=192324765]
+[node name="Front" type="AnimatedSprite2D" parent="Sprites" index="5" unique_id=192324765]
 material = SubResource("ShaderMaterial_afbqv")
 sprite_frames = SubResource("SpriteFrames_eyb6c")
 autoplay = "default"
@@ -305,6 +325,13 @@ stream = ExtResource("10_7thud")
 
 [node name="Particles" parent="." index="11" unique_id=875119314]
 visible = false
+
+[node name="Arrow" type="Node2D" parent="." index="12" unique_id=78158777]
+
+[node name="ArrowSprite" type="Sprite2D" parent="Arrow" index="0" unique_id=457934854]
+position = Vector2(15, 0)
+scale = Vector2(0.046874993, 0.042968765)
+texture = ExtResource("13_j3ovn")
 
 [connection signal="die" from="." to="." method="_on_die"]
 [connection signal="body_entered" from="DangerArea" to="." method="_on_danger_body_enter"]

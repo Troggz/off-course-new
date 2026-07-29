@@ -7,9 +7,10 @@ var detect: bool = false
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	print("point_count = ", player.point_count)
-	print("reaction_multiplier = ", player.reaction_multiplier)
-	print("player lives = ", player.lives)
+	#print("point_count = ", player.point_count)
+	#print("reaction_multiplier = ", player.reaction_multiplier)
+	#print("player lives = ", player.lives)
+	pass
 
 func _physics_process(_delta: float) -> void:
 	
@@ -31,18 +32,18 @@ func _physics_process(_delta: float) -> void:
 					if player.lives == 0:
 						player.die.emit()
 					else:
-						print("player lives = ", player.lives)
+						#print("player lives = ", player.lives)
 						player.linear_velocity = ((Vector2.ZERO - Vector2(x,y)).normalized()) * (player.linear_velocity * player.reaction_multiplier)
 						$"../Sprites/Front".self_modulate.a = 0.25
 						$"../Sprites/Back".self_modulate.a = 0.25
 						$"../Sprites/Lupin".self_modulate.a = 0.25
-						print("invulnerable")
+						#print("invulnerable")
 						await get_tree().create_timer(player.invulnerable_time, true, true, false).timeout
 						player.invulnerable = false
 						$"../Sprites/Front".self_modulate.a = 1
 						$"../Sprites/Back".self_modulate.a = 1
 						$"../Sprites/Lupin".self_modulate.a = 1
-						print("vulnerable")
+						#print("vulnerable")
 				else:
 					player.linear_velocity = (Vector2.ZERO - Vector2(x,y)).normalized() * (player.linear_velocity * 1)	
 			else:

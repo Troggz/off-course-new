@@ -20,6 +20,14 @@ extends Orb
 @export var lives: int = 3
 @export var reaction_multiplier = 1.5 # Bigger multi = Bigger reaction to hits
 
+# Related to dash mechanics
+@export var dash_type: int = 1 # 1 = simple dash, 2 = orbit dash
+@export var dash_multiplier: float = 2.0
+@export var dash_cooldown: float = 3.0
+# Only for dash type 2:
+@export var dash_orbit_time: float = 3.0
+@export var dash_slow_multiplier: float = 0.90
+
 @onready var trajectory_probe: Orb = $TrajectoryProbe
 
 var unlatched_trajlines := []
@@ -28,6 +36,10 @@ var latched := false
 var dead := false
 
 var invulnerable := false
+var can_dash := true
+var circle: Tween
+var check := false
+
 
 func _ready() -> void:
 	if Global.lupin == 3:
@@ -79,8 +91,97 @@ func _process(delta: float) -> void:
 			$Sprites/DelatchSmoke.emitting = true
 			$Sprites/Front.modulate = Color(1.0, 1.0, 1.0)
 			$Sprites/Back.modulate = Color(1.0, 1.0, 1.0)
+			
+		#if Input.is_action_just_pressed("dash"):
+			#if dash_type == 1 && can_dash == true:
+				#can_dash = false
+				#linear_velocity *= dash_multiplier
+				#$Sprites/BoostSmoke.emitting = true
+				#await get_tree().create_timer(dash_cooldown, true, false, false).timeout
+				#can_dash = true
+			#
+			#elif dash_type == 2 && can_dash == true:
+				#print("boost")
+				#print("circle = ", circle)
+				#if circle == null:
+					#linear_velocity *= 0.75
+					#circle = create_tween()
+					#circle.tween_property($Arrow, "rotation", deg_to_rad(360), 2)
+					#circle.finished.connect(_on_tween_finished)
+					#
+				#else:
+					#if circle.is_running():
+						#circle.pause()
+						#print("Arrow position = ", $Arrow.rotation)
+						#$Arrow.rotation = 0
+						#circle.kill()
+						#circle = null
+						
+					#else:
+						#if circle:
+							#circle.kill()
+						#circle = create_tween()
+						#circle.tween_property($Arrow, "rotation", deg_to_rad(360), 2)
+					
+				#can_dash = false
+				#dash_orbit()
+				#$Sprites/BoostSmoke.emitting = true
+				#await get_tree().create_timer(dash_cooldown, true, false, false).timeout
+				#can_dash = true
+				
 	else:
 		latched = false
+		clear_arcs()
+		
+	if Input.is_action_just_pressed("dash"):
+		if dash_type == 1 && can_dash == true:
+			can_dash = false
+			linear_velocity *= dash_multiplier
+			$Sprites/BoostSmoke.emitting = true
+			await get_tree().create_timer(dash_cooldown, true, false, false).timeout
+			can_dash = true
+			
+		elif dash_type == 2 && can_dash == true:
+			print("boost")
+			print("circle = ", circle)
+			if circle == null:
+				active = false
+				dead = true
+				linear_velocity *= dash_slow_multiplier
+				circle = create_tween()
+				circle.tween_property($Arrow, "rotation", deg_to_rad(360), dash_orbit_time)
+				circle.finished.connect(_on_tween_finished)
+					
+			else:
+				if circle.is_running():
+					can_dash = false
+					circle.pause()
+					print("Arrow rotation = ", $Arrow.rotation)
+					linear_velocity = Vector2(cos($Arrow.rotation), sin($Arrow.rotation)) * linear_velocity.length()
+					linear_velocity /= dash_slow_multiplier
+					$Sprites/BoostSmoke.emitting = true
+					linear_velocity *= dash_multiplier
+					
+					$Arrow.rotation = 0
+					circle.kill()
+					dead = false
+					active = true
+					circle = null
+					await get_tree().create_timer(dash_cooldown, true, false, false).timeout
+					can_dash = true
+
+func _on_tween_finished() -> void:
+	can_dash = false
+	circle.kill()
+	dead = false
+	active = true
+	circle = null
+	$Arrow.rotation = 0
+	linear_velocity /= dash_slow_multiplier
+	print("tween finished")
+	await get_tree().create_timer(dash_cooldown, true, false, false).timeout
+	can_dash = true
+	
 
 
 func handle_rotation(delta: float) -> void:
@@ -210,6 +311,15 @@ func draw_arcs() -> void:
 			add_child(arc)
 			orb_arcs.append(arc)
 
+func dash_orbit() -> void:
+	if circle:
+		circle.kill()
+	circle = create_tween()
+	circle.tween_property($Arrow, "rotation", deg_to_rad(360), 2)
+	while circle.is_running():
+		await get_tree().process_frame
+	$Arrow.rotation = 0
+	print("boom")
 
 signal die
 func _on_die() -> void:
