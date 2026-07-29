@@ -17,7 +17,7 @@ func _process(_delta: float) -> void:
 		print("com")
 
 	if Input.is_action_just_pressed("latch") && panel == 4:
-		get_tree().change_scene_to_file("res://levels/level_0.tscn")
+		SceneManager.load_level(0)
 
 
 func _on_animation_player_animation_finished(_anim_name: StringName) -> void:

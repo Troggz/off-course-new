@@ -23,6 +23,7 @@ config/icon="res://icon.svg"
 [autoload]
 
 Global="*res://managers/global.gd"
+SceneManager="*uid://bnfw4pyuuetyl"
 
 [display]
 

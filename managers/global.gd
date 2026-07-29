@@ -1,7 +1,5 @@
 extends Node
 
-
-const MENU_SCENE := preload("res://entities/menu/menu.tscn")
 const PAUSE_MENU_SCENE := preload("res://ui/pause/pause_menu.tscn")
 
 enum State { PLAYING, PAUSED, CUTSCENE }
@@ -21,13 +19,16 @@ func _ready() -> void:
 	layer.add_child(_pause_menu)
 	_pause_menu.hide()
 
+
 func set_state(next: State) -> void:
 	state = next
 	get_tree().paused = next != State.PLAYING
 	
+
 func can_pause() -> bool:
 	return state == State.PLAYING
 	
+
 func _unhandled_input(event: InputEvent) -> void:
 	if not event.is_action_pressed("pause"):
 		return
@@ -45,13 +46,3 @@ func pause() -> void:
 func resume() -> void:
 	_pause_menu.hide()
 	set_state(State.PLAYING)
-
-
-func restart_level() -> void:
-	resume()
-	get_tree().reload_current_scene.call_deferred()
-
-
-func go_to_menu() -> void:
-	resume()
-	get_tree().change_scene_to_packed.call_deferred(MENU_SCENE)

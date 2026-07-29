@@ -9,8 +9,8 @@ func _on_resume_button_pressed() -> void:
 
 func _on_restart_button_pressed() -> void:
 	sound.play()
-	Global.restart_level()
+	SceneManager.restart() 
 
 func _on_menu_button_pressed() -> void:
 	sound.play()
-	Global.go_to_menu()
+	SceneManager.to_menu()

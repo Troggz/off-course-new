@@ -55,7 +55,7 @@ func _on_body_shape_entered(_body_rid: RID, body: Node, _body_shape_index: int, 
 				"  kept=", "%.0f" % (speed_after / max(speed_before, 0.001) * 100.0), "%")
 
 
-func bounce(normal: Vector2, incidence: Vector2) -> void:
+func bounce(_normal: Vector2, _incidence: Vector2) -> void:
 	$BounceAudio.play()
 	# --- OLD custom bounce (velocity override) DISABLED ---
 	# Now relying on Godot's built-in restitution: PhysicsMaterial bounce=0.8 in orb.tscn.
