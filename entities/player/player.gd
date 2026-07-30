@@ -15,14 +15,16 @@ extends Orb
 @export var invulnerable_time: float = 3 # Invulnerability time in seconds
 @export var hurt_radius: float = 9 # Length of the raycast
 @export var point_count: int = 16 # Precision of the raycast, more points = more precise redirection (but potentially more buggy)
-@export var NWSE: bool = false # Determines whether the player can be redirected in true north, west, etc.
-# Set "NWSE" to false if "point_count" = 4
+@export var Can_NWSE: bool # Determines whether the player can be redirected in true north, west, etc.
+# Set "Can_NWSE" to true if "point_count" = 4
 @export var lives: int = 3
 @export var reaction_multiplier = 1.5 # Bigger multi = Bigger reaction to hits
 
 # Related to dash mechanics
-@export var dash_type: int = 1 # 1 = simple dash, 2 = orbit dash
-@export var dash_multiplier: float = 2.0
+@export var dash_type: int # 1 = simple dash, 2 = orbit dash
+@export var dash_application: int
+@export var dash_multiplier: float
+@export var dash_speed: float
 @export var dash_cooldown: float = 3.0
 # Only for dash type 2:
 @export var dash_orbit_time: float = 3.0
@@ -38,7 +40,7 @@ var dead := false
 var invulnerable := false
 var can_dash := true
 var circle: Tween
-var check := false
+var latchable := true
 
 
 func _ready() -> void:
@@ -55,6 +57,9 @@ func _ready() -> void:
 var latch_time := 0.0
 func _process(delta: float) -> void:
 	
+	#print(linear_velocity.length())
+	#print(linear_velocity)
+	
 	super (delta)
 	handle_rotation(delta)
 
@@ -63,7 +68,7 @@ func _process(delta: float) -> void:
 		$Sprites/Lupin.scale = Vector2(1.45, 1.45)
 
 	clear_arcs()
-	if not dead:
+	if latchable:
 		draw_trajectories()
 		draw_arcs()
 
@@ -91,43 +96,6 @@ func _process(delta: float) -> void:
 			$Sprites/DelatchSmoke.emitting = true
 			$Sprites/Front.modulate = Color(1.0, 1.0, 1.0)
 			$Sprites/Back.modulate = Color(1.0, 1.0, 1.0)
-			
-		#if Input.is_action_just_pressed("dash"):
-			#if dash_type == 1 && can_dash == true:
-				#can_dash = false
-				#linear_velocity *= dash_multiplier
-				#$Sprites/BoostSmoke.emitting = true
-				#await get_tree().create_timer(dash_cooldown, true, false, false).timeout
-				#can_dash = true
-			#
-			#elif dash_type == 2 && can_dash == true:
-				#print("boost")
-				#print("circle = ", circle)
-				#if circle == null:
-					#linear_velocity *= 0.75
-					#circle = create_tween()
-					#circle.tween_property($Arrow, "rotation", deg_to_rad(360), 2)
-					#circle.finished.connect(_on_tween_finished)
-					#
-				#else:
-					#if circle.is_running():
-						#circle.pause()
-						#print("Arrow position = ", $Arrow.rotation)
-						#$Arrow.rotation = 0
-						#circle.kill()
-						#circle = null
-						
-					#else:
-						#if circle:
-							#circle.kill()
-						#circle = create_tween()
-						#circle.tween_property($Arrow, "rotation", deg_to_rad(360), 2)
-					
-				#can_dash = false
-				#dash_orbit()
-				#$Sprites/BoostSmoke.emitting = true
-				#await get_tree().create_timer(dash_cooldown, true, false, false).timeout
-				#can_dash = true
 				
 	else:
 		latched = false
@@ -136,40 +104,38 @@ func _process(delta: float) -> void:
 	if Input.is_action_just_pressed("dash"):
 		if dash_type == 1 && can_dash == true:
 			can_dash = false
-			linear_velocity *= dash_multiplier
+			dash_processor(dash_application)
 			$Sprites/BoostSmoke.emitting = true
 			await get_tree().create_timer(dash_cooldown, true, false, false).timeout
 			can_dash = true
 			
 		elif dash_type == 2 && can_dash == true:
-			print("boost")
-			print("circle = ", circle)
 			if circle == null:
 				active = false
-				dead = true
+				latchable = false
 				linear_velocity *= dash_slow_multiplier
 				circle = create_tween()
 				circle.tween_property($Arrow, "rotation", deg_to_rad(360), dash_orbit_time)
-				circle.finished.connect(_on_tween_finished)
+				circle.finished.connect(_on_orbit_finished)
 					
 			else:
 				if circle.is_running():
 					can_dash = false
 					circle.pause()
-					print("Arrow rotation = ", $Arrow.rotation)
-					linear_velocity = Vector2(cos($Arrow.rotation), sin($Arrow.rotation)) * linear_velocity.length()
+					#print("Arrow rotation = ", $Arrow.rotation)
 					linear_velocity /= dash_slow_multiplier
+					dash_processor(dash_application)
+					linear_velocity = Vector2(cos($Arrow.rotation), sin($Arrow.rotation)) * linear_velocity.length()
 					$Sprites/BoostSmoke.emitting = true
-					linear_velocity *= dash_multiplier
-					
 					$Arrow.rotation = 0
 					circle.kill()
-					dead = false
-					active = true
+					latchable = true
+					active = true # active relates to orb gravity on or off
 					circle = null
 					await get_tree().create_timer(dash_cooldown, true, false, false).timeout
 					can_dash = true
 					
+	# Code for dash_type 3
 	if Input.is_action_just_pressed("up"):
 		third_dash(deg_to_rad(270))
 	elif Input.is_action_just_pressed("down"):
@@ -178,28 +144,32 @@ func _process(delta: float) -> void:
 		third_dash(deg_to_rad(180))
 	elif Input.is_action_just_pressed("right"):
 		third_dash(deg_to_rad(0))
+		
+func dash_processor(type: int) -> void:
+	if dash_application == 1: # Current Speed is multiplied
+		linear_velocity *= dash_multiplier
+	elif dash_application == 2: # Replace current speed with dash speed
+		linear_velocity = linear_velocity.normalized() #* dash_speed
 
 func third_dash(rad: float) -> void:
 	if dash_type == 3 && can_dash == true:
 		can_dash = false
+		dash_processor(dash_application)
 		linear_velocity = Vector2(cos(rad), sin(rad)) * linear_velocity.length()
-		linear_velocity *= dash_multiplier
 		$Sprites/BoostSmoke.emitting = true
 		await get_tree().create_timer(dash_cooldown, true, false, false).timeout
 		can_dash = true
 
-func _on_tween_finished() -> void:
+func _on_orbit_finished() -> void:
 	can_dash = false
 	circle.kill()
-	dead = false
+	latchable = true
 	active = true
 	circle = null
 	$Arrow.rotation = 0
 	linear_velocity /= dash_slow_multiplier
-	print("tween finished")
 	await get_tree().create_timer(dash_cooldown, true, false, false).timeout
 	can_dash = true
-	
 
 
 func handle_rotation(delta: float) -> void:

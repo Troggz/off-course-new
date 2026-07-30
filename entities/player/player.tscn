@@ -218,11 +218,13 @@ arc_divisions = 8
 invulnerable_time = 3.0
 hurt_radius = 9.0
 point_count = 16
-NWSE = false
+Can_NWSE = false
 lives = 3
 reaction_multiplier = 1.5
-dash_type = 3
+dash_type = 2
+dash_application = 1
 dash_multiplier = 2.0
+dash_speed = 1000.0
 dash_cooldown = 3.0
 dash_orbit_time = 3.0
 dash_slow_multiplier = 0.25
@@ -301,7 +303,6 @@ active = false
 radius = 8.0
 
 [node name="DangerRaycast" type="RayCast2D" parent="." index="4" unique_id=743497495]
-target_position = Vector2(9, 0)
 collision_mask = 2
 script = ExtResource("9_a1qjk")
 
