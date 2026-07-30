@@ -169,6 +169,24 @@ func _process(delta: float) -> void:
 					circle = null
 					await get_tree().create_timer(dash_cooldown, true, false, false).timeout
 					can_dash = true
+					
+	if Input.is_action_just_pressed("up"):
+		third_dash(deg_to_rad(270))
+	elif Input.is_action_just_pressed("down"):
+		third_dash(deg_to_rad(90))
+	elif Input.is_action_just_pressed("left"):
+		third_dash(deg_to_rad(180))
+	elif Input.is_action_just_pressed("right"):
+		third_dash(deg_to_rad(0))
+
+func third_dash(rad: float) -> void:
+	if dash_type == 3 && can_dash == true:
+		can_dash = false
+		linear_velocity = Vector2(cos(rad), sin(rad)) * linear_velocity.length()
+		linear_velocity *= dash_multiplier
+		$Sprites/BoostSmoke.emitting = true
+		await get_tree().create_timer(dash_cooldown, true, false, false).timeout
+		can_dash = true
 
 func _on_tween_finished() -> void:
 	can_dash = false
