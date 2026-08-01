@@ -49,7 +49,7 @@ func _process(delta: float) -> void:
 		if Input.is_action_just_pressed("latch"):
 			latched = true
 			latch_time = time
-
+		
 			# var strength := gravitate().length() / 18.0
 			$LatchAudio.volume_db = 10.0 # log(strength) * 3.5
 			$LatchAudio.pitch_scale = randf_range(0.95, 1.20)

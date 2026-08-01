@@ -525,6 +525,20 @@ offset_right = 130.0
 offset_bottom = 142.0
 grow_horizontal = 1
 grow_vertical = 1
+hold_time = 0.5
+
+[node name="PopUpPanel2" parent="." unique_id=1097172517 instance=ExtResource("16_panwl")]
+anchors_preset = 0
+anchor_right = 0.0
+anchor_bottom = 0.0
+offset_left = 669.0
+offset_top = 113.0
+offset_right = 669.0
+offset_bottom = 113.0
+grow_horizontal = 1
+grow_vertical = 1
+scale = Vector2(2, 2)
+hold_time = 0.5
 
 [connection signal="timeout" from="EntranceDoor/Timer" to="." method="_on_entrance_timeout"]
 [connection signal="timeout" from="PlayerSpawn/Timer" to="." method="_on_spawn_timer_timeout"]
