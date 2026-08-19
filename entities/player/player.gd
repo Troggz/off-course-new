@@ -1,6 +1,7 @@
 class_name Player
 extends Orb
 
+@export_group("Orb Properties")
 @export var rotation_factor: float = 0.95
 @export var trajectory_steps: int = 96
 @export var trajectory_step_size: float = 1.0 / 60.0
@@ -11,6 +12,7 @@ extends Orb
 @export var arcs: int = 12
 @export var arc_divisions: int = 8
 
+@export_group("Health Properties")
 # Related to hurtbox
 @export var invulnerable_time: float = 3 # Invulnerability time in seconds
 @export var hurt_radius: float = 9 # Length of the raycast
@@ -21,6 +23,7 @@ extends Orb
 @export var reaction_multiplier = 1.5 # Bigger multi = Bigger reaction to hits
 
 # Related to dash mechanics
+@export_group("Dash_Properties")
 @export var dash_type: int # 1 = simple dash, 2 = orbit dash
 @export var dash_application: int
 @export var dash_multiplier: float
@@ -57,10 +60,11 @@ func _ready() -> void:
 var latch_time := 0.0
 func _process(delta: float) -> void:
 	
+	#print(linear_velocity.normalized())
 	#print(linear_velocity.length())
 	#print(linear_velocity)
 	
-	super (delta)
+	super(delta)
 	handle_rotation(delta)
 
 	# Because 7 8 9
@@ -149,7 +153,7 @@ func dash_processor(type: int) -> void:
 	if dash_application == 1: # Current Speed is multiplied
 		linear_velocity *= dash_multiplier
 	elif dash_application == 2: # Replace current speed with dash speed
-		linear_velocity = linear_velocity.normalized() #* dash_speed
+		linear_velocity = linear_velocity.normalized() * dash_speed
 
 func third_dash(rad: float) -> void:
 	if dash_type == 3 && can_dash == true:
@@ -159,6 +163,16 @@ func third_dash(rad: float) -> void:
 		$Sprites/BoostSmoke.emitting = true
 		await get_tree().create_timer(dash_cooldown, true, false, false).timeout
 		can_dash = true
+
+func dash_orbit() -> void:
+	if circle:
+		circle.kill()
+	circle = create_tween()
+	circle.tween_property($Arrow, "rotation", deg_to_rad(360), 2)
+	while circle.is_running():
+		await get_tree().process_frame
+	$Arrow.rotation = 0
+	print("boom")
 
 func _on_orbit_finished() -> void:
 	can_dash = false
@@ -299,15 +313,6 @@ func draw_arcs() -> void:
 			add_child(arc)
 			orb_arcs.append(arc)
 
-func dash_orbit() -> void:
-	if circle:
-		circle.kill()
-	circle = create_tween()
-	circle.tween_property($Arrow, "rotation", deg_to_rad(360), 2)
-	while circle.is_running():
-		await get_tree().process_frame
-	$Arrow.rotation = 0
-	print("boom")
 
 signal die
 func _on_die() -> void:
@@ -332,6 +337,7 @@ func do_death() -> void:
 	$DeathAudio.play()
 
 #func _on_danger_body_enter(_body: Node2D) -> void:
+	
 	##if not dead:
 		##die.emit()
 	#pass
@@ -339,3 +345,11 @@ func do_death() -> void:
 
 func _on_death_audio_finished() -> void:
 	queue_free()
+
+
+func _on_danger_area_body_entered(_body: Node2D) -> void:
+	print(_body)
+	
+	##if not dead:
+		##die.emit()
+	#pass

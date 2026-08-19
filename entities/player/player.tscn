@@ -199,7 +199,7 @@ animations = [{
 }]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_8fjmc"]
-radius = 8.5
+radius = 13.0
 
 [node name="Player" unique_id=1039897982 groups=["player"] instance=ExtResource("1_symyc")]
 mass = 0.75
@@ -222,9 +222,9 @@ Can_NWSE = false
 lives = 3
 reaction_multiplier = 1.5
 dash_type = 2
-dash_application = 1
+dash_application = 2
 dash_multiplier = 2.0
-dash_speed = 1000.0
+dash_speed = 500.0
 dash_cooldown = 3.0
 dash_orbit_time = 3.0
 dash_slow_multiplier = 0.25
@@ -307,13 +307,11 @@ collision_mask = 2
 script = ExtResource("9_a1qjk")
 
 [node name="DangerArea" type="Area2D" parent="." index="5" unique_id=409287025]
-collision_layer = 2
-collision_mask = 2
+collision_layer = 4
+collision_mask = 4
 
 [node name="CollisionShape" type="CollisionShape2D" parent="DangerArea" index="0" unique_id=1271870757]
-visible = false
 shape = SubResource("CircleShape2D_8fjmc")
-disabled = true
 
 [node name="DeathAudio" type="AudioStreamPlayer2D" parent="." index="6" unique_id=614020021]
 stream = ExtResource("7_qiwj3")
@@ -335,5 +333,5 @@ scale = Vector2(0.046874993, 0.042968765)
 texture = ExtResource("13_j3ovn")
 
 [connection signal="die" from="." to="." method="_on_die"]
-[connection signal="body_entered" from="DangerArea" to="." method="_on_danger_body_enter"]
+[connection signal="body_entered" from="DangerArea" to="." method="_on_danger_area_body_entered"]
 [connection signal="finished" from="DeathAudio" to="." method="_on_death_audio_finished"]
