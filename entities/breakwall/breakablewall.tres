@@ -1,0 +1,15 @@
+[gd_resource type="TileSet" format=3 uid="uid://c5uikkyewmdrs"]
+
+[ext_resource type="Texture2D" uid="uid://bv1i4lnxvqgct" path="res://entities/breakwall/breakablewall.png" id="1_drxo2"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_0dl54"]
+texture = ExtResource("1_drxo2")
+0:0/0 = 0
+0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+0:0/0/physics_layer_1/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+
+[resource]
+physics_layer_0/collision_layer = 1
+physics_layer_1/collision_layer = 4
+physics_layer_1/collision_mask = 4
+sources/0 = SubResource("TileSetAtlasSource_0dl54")
