@@ -142,7 +142,7 @@ animations = [{
 "duration": 1.0,
 "texture": ExtResource("36_mil6i")
 }],
-"loop": true,
+"loop": 1,
 "name": &"default",
 "speed": 12.0
 }]
@@ -161,7 +161,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_qiot3")
 }],
-"loop": true,
+"loop": 1,
 "name": &"default",
 "speed": 5.0
 }, {
@@ -169,7 +169,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_44gu3")
 }],
-"loop": true,
+"loop": 1,
 "name": &"hold",
 "speed": 5.0
 }]
@@ -263,7 +263,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_ia6v6")
 }],
-"loop": false,
+"loop": 0,
 "name": &"close",
 "speed": 18.0
 }, {
@@ -292,7 +292,7 @@ animations = [{
 "duration": 1.0,
 "texture": null
 }],
-"loop": false,
+"loop": 0,
 "name": &"open",
 "speed": 18.0
 }]
