@@ -2,6 +2,7 @@ class_name Level
 extends Node2D
 
 @export var level: int
+@export var next_scene: PackedScene
 
 @export var initial_dialogs: Array[String] = [
 	"A:Initiating level #{level}..."
@@ -420,10 +421,10 @@ func _on_finish_area_entered(body: Node2D) -> void:
 		print("Finish!")
 		transition.play("close")
 
-# Change level
+
 func _on_transition_animation_finished() -> void:
 	if transition.animation == "close":
-		SceneManager.next_level()
+		get_tree().call_deferred("change_scene_to_packed", next_scene)
 
 
 func _on_loop_button_input_event(_viewport: Node, event: InputEvent, _shape_idx: int) -> void:
