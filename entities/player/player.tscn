@@ -228,6 +228,7 @@ dash_speed = 500.0
 dash_cooldown = 3.0
 dash_orbit_time = 3.0
 dash_slow_multiplier = 0.25
+break_speed = 300
 radius = 8.0
 
 [node name="Sprite" parent="." index="0" unique_id=139438059]

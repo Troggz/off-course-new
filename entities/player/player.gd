@@ -23,7 +23,7 @@ extends Orb
 @export var reaction_multiplier = 1.5 # Bigger multi = Bigger reaction to hits
 
 # Related to dash mechanics
-@export_group("Dash_Properties")
+@export_group("Dash Properties")
 @export var dash_type: int # 1 = simple dash, 2 = orbit dash
 @export var dash_application: int
 @export var dash_multiplier: float
@@ -32,6 +32,9 @@ extends Orb
 # Only for dash type 2:
 @export var dash_orbit_time: float = 3.0
 @export var dash_slow_multiplier: float = 0.90
+
+@export_group("Wall Break Properties")
+@export var break_speed: int
 
 @onready var trajectory_probe: Orb = $TrajectoryProbe
 
@@ -77,7 +80,8 @@ func _process(delta: float) -> void:
 		draw_arcs()
 
 		if check_collisions([trajectory_probe]):
-			die.emit()
+			pass 
+			#die.emit()
 		if Input.is_action_just_pressed("latch"):
 			latched = true
 			latch_time = time
@@ -336,19 +340,15 @@ func do_death() -> void:
 
 	$DeathAudio.play()
 
-#func _on_danger_body_enter(_body: Node2D) -> void:
-	
-	##if not dead:
-		##die.emit()
-	#pass
-
-
 func _on_death_audio_finished() -> void:
 	queue_free()
 
 
-func _on_danger_area_body_entered(_body: Node2D) -> void:
-	print(_body)
+func _on_danger_area_body_entered(_body) -> void:
+	var wall = _body.get_parent()
+	
+	if linear_velocity.length() >= break_speed:
+		wall.broke = true
 	
 	##if not dead:
 		##die.emit()

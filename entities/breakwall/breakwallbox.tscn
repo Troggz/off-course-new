@@ -1,20 +1,20 @@
 [gd_scene format=3 uid="uid://dgacp7ey57ftx"]
 
-[ext_resource type="Script" uid="uid://dyng4o1cum3x1" path="res://entities/breakwall/breakwallbox.gd" id="1_8ovyv"]
-[ext_resource type="Texture2D" uid="uid://bv1i4lnxvqgct" path="res://entities/breakwall/breakablewall.png" id="2_lvrcj"]
+[ext_resource type="Script" uid="uid://7jnrkbjvbqnf" path="res://entities/breakwall/breakwallbox.gd" id="1_8ovyv"]
+[ext_resource type="TileSet" uid="uid://c5uikkyewmdrs" path="res://entities/breakwall/breakablewall.tres" id="2_8ovyv"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_hynae"]
-size = Vector2(56.5, 42)
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_c3fae"]
 
-[node name="StaticBody2D" type="StaticBody2D" unique_id=1471525679]
+[node name="BreakWall" type="StaticBody2D" unique_id=1878800002]
 collision_layer = 5
 collision_mask = 5
 script = ExtResource("1_8ovyv")
+tile_size = Vector2i(4, 2)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=872921546]
-texture_repeat = 2
-shape = SubResource("RectangleShape2D_hynae")
+[node name="TileMapLayer" type="TileMapLayer" parent="." unique_id=1503344398]
+tile_set = ExtResource("2_8ovyv")
 
-[node name="Sprite2D" type="Sprite2D" parent="CollisionShape2D" unique_id=600023796]
-texture_repeat = 2
-texture = ExtResource("2_lvrcj")
+[node name="IgnoreBox" type="CollisionShape2D" parent="." unique_id=628609830]
+visible = false
+shape = SubResource("RectangleShape2D_c3fae")
+disabled = true

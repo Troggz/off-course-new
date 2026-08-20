@@ -1,8 +1,0 @@
-[gd_scene format=3 uid="uid://44ua6p648sva"]
-
-[ext_resource type="TileSet" uid="uid://c5uikkyewmdrs" path="res://entities/breakwall/breakablewall.tres" id="1_jkyc8"]
-[ext_resource type="Script" uid="uid://c0r4h3xcubkst" path="res://entities/breakwall/breakwall.gd" id="2_6hkrk"]
-
-[node name="BreakableWalls" type="TileMapLayer" unique_id=490565333]
-tile_set = ExtResource("1_jkyc8")
-script = ExtResource("2_6hkrk")
