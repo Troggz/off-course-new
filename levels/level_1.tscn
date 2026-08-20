@@ -252,7 +252,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_x1db4")
 }],
-"loop": true,
+"loop": 1,
 "name": &"bounce",
 "speed": 4.0
 }, {
@@ -281,7 +281,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_g1jay")
 }],
-"loop": true,
+"loop": 1,
 "name": &"button",
 "speed": 4.0
 }, {
@@ -340,7 +340,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_m15lv")
 }],
-"loop": true,
+"loop": 1,
 "name": &"latch and delatch",
 "speed": 4.0
 }, {
@@ -408,7 +408,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_c146n")
 }],
-"loop": true,
+"loop": 1,
 "name": &"trajectory",
 "speed": 5.0
 }]
