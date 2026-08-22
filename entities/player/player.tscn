@@ -228,7 +228,7 @@ dash_speed = 500.0
 dash_cooldown = 3.0
 dash_orbit_time = 3.0
 dash_slow_multiplier = 0.25
-break_speed = 300
+break_speed = 1000
 radius = 8.0
 
 [node name="Sprite" parent="." index="0" unique_id=139438059]
@@ -333,6 +333,11 @@ position = Vector2(15, 0)
 scale = Vector2(0.046874993, 0.042968765)
 texture = ExtResource("13_j3ovn")
 
+[node name="Area2D" parent="." index="13" unique_id=891432176]
+monitoring = false
+monitorable = false
+
 [connection signal="die" from="." to="." method="_on_die"]
+[connection signal="area_entered" from="DangerArea" to="." method="_on_danger_area_area_entered"]
 [connection signal="body_entered" from="DangerArea" to="." method="_on_danger_area_body_entered"]
 [connection signal="finished" from="DeathAudio" to="." method="_on_death_audio_finished"]

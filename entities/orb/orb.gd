@@ -2,12 +2,24 @@ class_name Orb
 extends RigidBody2D
 
 @export var active: bool = true
+@export var station: bool = false
 @export var deadly: bool = false
 @export var radius: float = 10.0
 @export var intensity: float = 1.0
 @export var correction_radius: float = 128.0
 @export var preferred_radius: float = 48.0
 @export var influence_radius: float = 256.0
+
+#var short_distance: float = 500
+#var nearest_orb = self
+var original_intensity: float
+
+var latched_orb := false
+
+@export var station_intensity: float = 4.0
+@export var inactive_intensity: float = 1.0
+
+#var in_station := false
 
 var color: Color:
 	get:
@@ -22,11 +34,26 @@ var color: Color:
 
 		return rgb
 
+func _ready():
+	$CollisionShape.shape.radius = radius
+	
+	if deadly == true:
+		set_collision_layer_value(2, true)
+		
+	if station == true:
+		pass
+		set_collision_layer_value(1, false)
+		$Area2D/CollisionShape2D.disabled = false
+		print("coll area ", $Area2D.get_collision_layer_value(3))
+		#$CollisionShape.disabled = true
+		#intensity = 10
+		#correction_radius = 10
+		#preferred_radius = 10
 
 var time := 0.0
 func _process(delta: float) -> void:
 	time += delta
-	$CollisionShape.shape.radius = radius
+	#$CollisionShape.shape.radius = radius
 	$Particles.color = color
 	$Sprite.modulate = color
 
@@ -34,7 +61,10 @@ func _process(delta: float) -> void:
 @onready var last_velocity := linear_velocity
 func _physics_process(_delta: float) -> void:
 	if active:
-		apply_force(gravitate())
+		if station == true:
+			pass
+		else:
+			apply_force(gravitate())
 	last_velocity = linear_velocity
 
 
@@ -71,21 +101,55 @@ func gravitate(exclusions: Array = []) -> Vector2:
 
 	var force := Vector2(0.0, 0.0)
 	for orb: Orb in get_tree().get_nodes_in_group("orbs"):
+		#print(orb)
 		if orb == self or not orb.active or orb in exclusions:
 			continue
+		
+		#print("script owner ", self)
+		#print("in loop ", orb)
 
 		var g := 2000000.0 * orb.intensity
 		var distance_sq := (orb.global_position - global_position).length_squared()
 		var distance := sqrt(distance_sq)
+		
+		#if short_distance < distance:
+			#short_distance = distance
+			#nearest_orb = orb
+			#if nearest_orb.station == true:
+				#nearest_orb.intensity = 1
+			#nearest_orb = orb
 
 		if distance > orb.influence_radius:
 			continue
+		
 		var influence := 1.0 - (distance / orb.influence_radius) ** 16.0
-
-		# Newton's universal gravitation
 		var direction := (orb.global_position - global_position) / distance
 		var force_vec := g * mass * orb.mass / distance_sq * direction * influence
+		#force += force_vec
+		
+		# If latched is true & and station is true: increase intensity
+		if orb.station == true && latched_orb == true:
+			#$Area2D/CollisionShape2D.disabled = false
+			orb.intensity = orb.station_intensity
+			direction = (orb.global_position - global_position).normalized()
+			force_vec = g * mass * orb.mass / distance_sq * direction * influence
+			force += force_vec
+			return force
+		elif orb.station == true && latched_orb == false:
+			#$Area2D/CollisionShape2D.disabled = true
+			orb.intensity = orb.inactive_intensity
+			#print(orb.intensity)
+			continue
+		
 		force += force_vec
+		
+		#var influence := 1.0 - (distance / orb.influence_radius) ** 16.0
+
+		# Newton's universal gravitation
+		#var direction := (orb.global_position - global_position) / distance
+		#var force_vec := g * mass * orb.mass / distance_sq * direction * influence
+		#force += force_vec
+		#return force
 
 		# Circular orbit correction
 		if distance > orb.correction_radius:
@@ -108,7 +172,7 @@ func gravitate(exclusions: Array = []) -> Vector2:
 
 		var safety_strength := 1.0 - (distance / orb.preferred_radius) ** 4.0
 		force += -force_vec * safety_strength
-
+		
 	return force
 
 
