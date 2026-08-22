@@ -220,15 +220,20 @@ hurt_radius = 9.0
 point_count = 16
 Can_NWSE = false
 lives = 3
-reaction_multiplier = 1.5
+knockback_type = 2
+knockback_multiplier = 1.5
+knockback_speed = 25
 dash_type = 2
 dash_application = 2
 dash_multiplier = 2.0
 dash_speed = 500.0
 dash_cooldown = 3.0
 dash_orbit_time = 3.0
-dash_slow_multiplier = 0.25
-break_speed = 1000
+slow_application = 2
+slow_multiplier = 0.9
+slow_speed = 5.0
+break_speed = 300
+break_time = 0.05
 radius = 8.0
 
 [node name="Sprite" parent="." index="0" unique_id=139438059]

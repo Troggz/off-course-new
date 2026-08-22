@@ -35,6 +35,7 @@ func _physics_process(_delta: float) -> void:
 		if is_colliding():
 			if reactable == true:
 				reactable = false
+				player.interrupt_dash_2()
 				rotation = wrapf(rotation + PI, 0.0, TAU)
 				if player.invulnerable == false:
 					player.invulnerable = true
@@ -44,8 +45,14 @@ func _physics_process(_delta: float) -> void:
 					else:
 						#print("player lives = ", player.lives)
 						#player.linear_velocity = ((Vector2.ZERO - Vector2(x,y)).normalized()) * (player.linear_velocity * player.reaction_multiplier)
-						player.linear_velocity = Vector2(cos(rotation), sin(rotation)) * player.linear_velocity.length()
-						player.linear_velocity = player.linear_velocity * player.reaction_multiplier
+						#player.linear_velocity = Vector2(cos(rotation), sin(rotation)) * player.linear_velocity.length()
+						player.linear_velocity *= Vector2(cos(rotation), sin(rotation)).normalized()
+						
+						if player.knockback_type == 1:
+							player.linear_velocity = player.linear_velocity * player.knockback_multiplier
+						elif player.knockback_type == 2:
+							player.linear_velocity = player.linear_velocity.normalized() * player.knockback_speed
+						
 						$"../Sprites/Front".self_modulate.a = 0.25
 						$"../Sprites/Back".self_modulate.a = 0.25
 						$"../Sprites/Lupin".self_modulate.a = 0.25

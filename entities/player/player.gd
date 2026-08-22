@@ -20,36 +20,40 @@ extends Orb
 @export var Can_NWSE: bool # Determines whether the player can be redirected in true north, west, etc.
 # Set "Can_NWSE" to true if "point_count" = 4
 @export var lives: int = 3
-@export var reaction_multiplier = 1.5 # Bigger multi = Bigger reaction to hits
+@export var knockback_type: int
+@export var knockback_multiplier = 1.5 # Bigger multi = Bigger reaction to hits
+@export var knockback_speed = 10
 
 # Related to dash mechanics
 @export_group("Dash Properties")
 @export var dash_type: int # 1 = simple dash, 2 = orbit dash
-@export var dash_application: int
+@export var dash_application: int # 1 = multiply speed, 2 = replace speed with dash speed
 @export var dash_multiplier: float
 @export var dash_speed: float
-@export var dash_cooldown: float = 3.0
-# Only for dash type 2:
-@export var dash_orbit_time: float = 3.0
-@export var dash_slow_multiplier: float = 0.90
+@export var dash_cooldown: float = 3.0 # Time taken before dash is available again
+@export_subgroup("For Dash Type 2")
+@export var dash_orbit_time: float = 3.0 # Time taken for arrow to fully orbit the player
+@export var slow_application: int # 1 = use multiplier, 2 = replace speed with slow speed
+@export var slow_multiplier: float = 0.90 # Multiplier for slowing down player during dash moment
+@export var slow_speed: float = 5 # Slow Speed when player charging up a dash
 
 @export_group("Wall Break Properties")
 @export var break_speed: int
+@export var break_time: float = 0.05
 
 @onready var trajectory_probe: Orb = $TrajectoryProbe
 
 var unlatched_trajlines := []
 var latched_trajlines := []
-var latched := false
 var dead := false
 
 var invulnerable := false
 var can_dash := true
 var circle: Tween
 var latchable := true
+var old_velocity : float
 
 var in_station := false
-
 var current_station : Orb
 
 func _ready() -> void:
@@ -65,8 +69,6 @@ func _ready() -> void:
 
 var latch_time := 0.0
 func _process(delta: float) -> void:
-	
-	#active = false
 	
 	#print(linear_velocity.normalized())
 	#print(linear_velocity.length())
@@ -89,7 +91,6 @@ func _process(delta: float) -> void:
 			#die.emit()
 		if Input.is_action_just_pressed("latch"):
 			latched = true
-			latched_orb = true
 			latch_time = time
 
 			# var strength := gravitate().length() / 18.0
@@ -100,46 +101,23 @@ func _process(delta: float) -> void:
 			$Sprites/Front.modulate = Color(1.0, 0.0, 0.0)
 			$Sprites/Back.modulate = Color(1.0, 0.0, 0.0)
 		if Input.is_action_just_released("latch"):
-			#print("unlatch")
 			var boost := get_unlatch_boost()
 			latched = false
-			latched_orb = false
 			linear_velocity *= boost
-
-			var strength := linear_velocity.length() / 32.0
-			$DelatchAudio.volume_db = log(strength) * 5.0 - 5.0
-			$DelatchAudio.play()
-			$Sprites/DelatchSmoke.emitting = true
-			$Sprites/Front.modulate = Color(1.0, 1.0, 1.0)
-			$Sprites/Back.modulate = Color(1.0, 1.0, 1.0)
-				
+			
+			unlatch_appearence()
 	else:
 		latched = false
 		clear_arcs()
 		
-	if Input.is_action_just_pressed("dash"):
+	if Input.is_action_just_pressed("dash") && latched == false:
 		if in_station == true:
 			circle.pause()
-			active = true
-			latchable = true
+			gravity_switch(true)
 			in_station = false
-			#current_station.in_station = true
 			
-			var strength := linear_velocity.length() / 32.0
-			$DelatchAudio.volume_db = log(strength) * 5.0 - 5.0
-			$DelatchAudio.play()
-			$Sprites/DelatchSmoke.emitting = true
-			$Sprites/Front.modulate = Color(1.0, 1.0, 1.0)
-			$Sprites/Back.modulate = Color(1.0, 1.0, 1.0)
-			
-			#print("active ", active)
-			#print("latchable ", latchable)
-			#print("latched ", latched)
-			#print("length ", linear_velocity.length())
-			linear_velocity = Vector2(cos($Arrow.rotation), sin($Arrow.rotation)).normalized()
-			#print("linear ", linear_velocity)
-			dash_processor(2)
-			$Sprites/BoostSmoke.emitting = true
+			unlatch_appearence()
+			player_direction($Arrow.rotation, 3)
 			circle.kill()
 			circle = null
 			$Arrow.rotation = 0
@@ -147,15 +125,17 @@ func _process(delta: float) -> void:
 		elif dash_type == 1 && can_dash == true:
 			can_dash = false
 			dash_processor(dash_application)
-			$Sprites/BoostSmoke.emitting = true
 			await get_tree().create_timer(dash_cooldown, true, false, false).timeout
 			can_dash = true
 			
 		elif dash_type == 2 && can_dash == true:
 			if circle == null:
-				active = false
-				latchable = false
-				linear_velocity *= dash_slow_multiplier
+				gravity_switch(false)
+				if slow_application == 1:
+					linear_velocity *= slow_multiplier
+				elif slow_application == 2:
+					old_velocity = linear_velocity.length()
+					linear_velocity = linear_velocity.normalized() * slow_speed
 				circle = create_tween()
 				circle.tween_property($Arrow, "rotation", deg_to_rad(360), dash_orbit_time)
 				circle.finished.connect(_on_orbit_finished)
@@ -164,15 +144,16 @@ func _process(delta: float) -> void:
 				if circle.is_running():
 					can_dash = false
 					circle.pause()
-					#print("Arrow rotation = ", $Arrow.rotation)
-					linear_velocity /= dash_slow_multiplier
-					dash_processor(dash_application)
-					linear_velocity = Vector2(cos($Arrow.rotation), sin($Arrow.rotation)) * linear_velocity.length()
-					$Sprites/BoostSmoke.emitting = true
+					
+					if slow_application == 1:
+						linear_velocity /= slow_multiplier
+					elif slow_application == 2:
+						linear_velocity = linear_velocity.normalized() * old_velocity
+						
+					player_direction($Arrow.rotation, dash_application)
 					$Arrow.rotation = 0
 					circle.kill()
-					latchable = true
-					active = true # active relates to orb gravity on or off
+					gravity_switch(true)
 					circle = null
 					await get_tree().create_timer(dash_cooldown, true, false, false).timeout
 					can_dash = true
@@ -186,43 +167,72 @@ func _process(delta: float) -> void:
 		third_dash(deg_to_rad(180))
 	elif Input.is_action_just_pressed("right"):
 		third_dash(deg_to_rad(0))
-		
-func dash_processor(type: int) -> void:
-	if dash_application == 1: # Current Speed is multiplied
-		linear_velocity *= dash_multiplier
-	elif dash_application == 2: # Replace current speed with dash speed
-		linear_velocity = linear_velocity.normalized() * dash_speed
-
-func third_dash(rad: float) -> void:
-	if dash_type == 3 && can_dash == true:
-		can_dash = false
-		dash_processor(dash_application)
-		linear_velocity = Vector2(cos(rad), sin(rad)) * linear_velocity.length()
-		$Sprites/BoostSmoke.emitting = true
-		await get_tree().create_timer(dash_cooldown, true, false, false).timeout
-		can_dash = true
-
-func dash_orbit() -> void:
-	if circle:
-		circle.kill()
-	circle = create_tween()
-	circle.tween_property($Arrow, "rotation", deg_to_rad(360), 2)
-	while circle.is_running():
-		await get_tree().process_frame
-	$Arrow.rotation = 0
-	print("boom")
 
 func _on_orbit_finished() -> void:
 	can_dash = false
 	circle.kill()
-	latchable = true
-	active = true
+	gravity_switch(true)
 	circle = null
 	$Arrow.rotation = 0
-	linear_velocity /= dash_slow_multiplier
+	
+	if slow_application == 1:
+		linear_velocity /= slow_multiplier
+	elif slow_application == 2:
+		linear_velocity = linear_velocity.normalized() * old_velocity
+		
 	await get_tree().create_timer(dash_cooldown, true, false, false).timeout
 	can_dash = true
 
+func interrupt_dash_2() -> void:
+	if dash_type == 2 && circle != null:
+		if circle.is_running():
+			circle.kill()
+			circle = null
+			$Arrow.rotation = 0
+
+func third_dash(rad: float) -> void:
+	if dash_type == 3 && can_dash == true:
+		can_dash = false
+		player_direction(rad, dash_application)
+		await get_tree().create_timer(dash_cooldown, true, false, false).timeout
+		can_dash = true
+
+# Apply a direction on the player depending on given rotation
+func player_direction(rad: float, dash_apply: int) -> void:
+	linear_velocity = Vector2(cos(rad), sin(rad)).normalized()
+	dash_processor(dash_apply)
+
+# Apply the dash boost on player and what type of boost
+func dash_processor(type: int) -> void:
+	if type == 1: # Current Speed is multiplied
+		linear_velocity *= dash_multiplier
+	elif type == 2: # Replace current speed with dash speed
+		linear_velocity = linear_velocity.normalized() * dash_speed
+	elif type == 3: # For station dash speed
+		linear_velocity = linear_velocity.normalized() * current_station.station_speed
+	$Sprites/BoostSmoke.emitting = true
+
+func unlatch_appearence() -> void:
+	var strength := linear_velocity.length() / 32.0
+	$DelatchAudio.volume_db = log(strength) * 5.0 - 5.0
+	$DelatchAudio.play()
+	$Sprites/DelatchSmoke.emitting = true
+	$Sprites/Front.modulate = Color(1.0, 1.0, 1.0)
+	$Sprites/Back.modulate = Color(1.0, 1.0, 1.0)
+
+func gravity_switch(switch: bool) -> void:
+	if switch == true:
+		active = true
+		latchable = true
+		for trajlines in [latched_trajlines, unlatched_trajlines]:
+			for line in trajlines:
+				line.show()
+	else:
+		active = false
+		latchable = false
+		for trajlines in [latched_trajlines, unlatched_trajlines]:
+			for line in trajlines:
+				line.hide()
 
 func handle_rotation(delta: float) -> void:
 	var rot := atan2(linear_velocity.y, linear_velocity.x)
@@ -240,7 +250,6 @@ func get_unlatch_boost() -> float:
 
 static func calc_latch(force: Vector2, velocity: Vector2, latching: bool, unlatched_grav: float) -> Vector2:
 	if latching:
-		#return Vector2(-200, -200)
 		return force
 	else:
 		var dotted := force.normalized().dot(velocity.normalized())
@@ -251,8 +260,6 @@ static func calc_latch(force: Vector2, velocity: Vector2, latching: bool, unlatc
 
 
 func gravitate(exclusions: Array = []) -> Vector2:
-	#print(self)
-	#return Vector2(0,0)
 	return calc_latch(super (exclusions + [trajectory_probe]), linear_velocity, latched, unlatched_gravitation)
 
 
@@ -361,16 +368,15 @@ func _on_die() -> void:
 
 
 func do_death() -> void:
+	latched = false
 	dead = true
-	active = false
+	gravity_switch(false)
 	$CollisionShape.disabled = true
 	linear_velocity = Vector2(0.0, 0.0)
-
-	for trajlines in [latched_trajlines, unlatched_trajlines]:
-		for line in trajlines:
-			line.hide()
+	
 	$Sprites/Back.hide()
 	$Sprites/Lupin.hide()
+	$Arrow/ArrowSprite.hide()
 	$Sprites/DelatchSmoke.emitting = true
 	$Sprites/Front.modulate = Color(1.0, 1.0, 1.0)
 	$Sprites/Front.play("pop")
@@ -385,30 +391,32 @@ func _on_danger_area_body_entered(_body) -> void:
 	var wall = _body.get_parent()
 	
 	if linear_velocity.length() >= break_speed:
-		wall.broke = true
+		
+		var old_velocity_wall := linear_velocity
+		linear_velocity = Vector2(0,0)
+		await get_tree().create_timer(0.025, true, false, false).timeout
+		#wall.broke = true
+		await wall.break_wall()
+		linear_velocity = old_velocity_wall
 	
 	##if not dead:
 		##die.emit()
 	#pass
 
 func _on_danger_area_area_entered(area: Area2D) -> void:
-	if latched_orb == false:
+	if latched == false:
 		return
-	
-	#print(area.get_parent())
+
 	current_station = area.get_parent()
-	#current_station.in_station = true
-	#linear_velocity = Vector2(0,0)
-	print(global_position)
+	global_position == global_position # DO NOT DELETE
 	global_position = current_station.global_position
 	linear_velocity = Vector2(0,0)
-	active = false
-	latchable = false
-	latched_orb = false
+	gravity_switch(false)
+	latched = false
 	in_station = true
 	
 	circle = create_tween()
 	circle.set_loops()
-	circle.tween_property($Arrow, "rotation", deg_to_rad(360), dash_orbit_time)
+	circle.tween_property($Arrow, "rotation", deg_to_rad(360), current_station.orbit_time)
 	circle.tween_callback(func(): $Arrow.rotation = deg_to_rad(0))
 	

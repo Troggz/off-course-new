@@ -2,7 +2,8 @@ class_name Orb
 extends RigidBody2D
 
 @export var active: bool = true
-@export var station: bool = false
+
+@export_group("Orb Properties")
 @export var deadly: bool = false
 @export var radius: float = 10.0
 @export var intensity: float = 1.0
@@ -10,15 +11,17 @@ extends RigidBody2D
 @export var preferred_radius: float = 48.0
 @export var influence_radius: float = 256.0
 
-#var short_distance: float = 500
-#var nearest_orb = self
-var original_intensity: float
+@export_group("Station Properties")
+@export var station: bool = false # Make orb a station or no
+@export var influence_station_radius: float = 256.0 # Range in which station affects player
+@export var station_intensity: float = 4.0 # Station Orb Intensity when active
+@export var inactive_intensity: float = 1.0 # Station Orb Intensity when not active
+@export var station_speed: float = 500.0 # Player speed given by station
+@export var orbit_time: float = 3.0 # Time taken for arrow to orbit player in a station
+@export var station_radius: float = 12.5 # Range the player's Area2D need to be in to enter the station
 
-var latched_orb := false
-
-@export var station_intensity: float = 4.0
-@export var inactive_intensity: float = 1.0
-
+# For player node
+var latched := false
 #var in_station := false
 
 var color: Color:
@@ -41,14 +44,10 @@ func _ready():
 		set_collision_layer_value(2, true)
 		
 	if station == true:
-		pass
 		set_collision_layer_value(1, false)
 		$Area2D/CollisionShape2D.disabled = false
-		print("coll area ", $Area2D.get_collision_layer_value(3))
-		#$CollisionShape.disabled = true
-		#intensity = 10
-		#correction_radius = 10
-		#preferred_radius = 10
+		$Area2D/CollisionShape2D.shape.radius = station_radius
+		#print("coll area ", $Area2D.get_collision_layer_value(3))
 
 var time := 0.0
 func _process(delta: float) -> void:
@@ -61,10 +60,11 @@ func _process(delta: float) -> void:
 @onready var last_velocity := linear_velocity
 func _physics_process(_delta: float) -> void:
 	if active:
-		if station == true:
-			pass
-		else:
-			apply_force(gravitate())
+		#if station == true:
+			#pass
+		#else:
+			#apply_force(gravitate())
+		apply_force(gravitate())
 	last_velocity = linear_velocity
 
 
@@ -122,20 +122,22 @@ func gravitate(exclusions: Array = []) -> Vector2:
 		if distance > orb.influence_radius:
 			continue
 		
+		# Newton's universal gravitation
 		var influence := 1.0 - (distance / orb.influence_radius) ** 16.0
 		var direction := (orb.global_position - global_position) / distance
 		var force_vec := g * mass * orb.mass / distance_sq * direction * influence
 		#force += force_vec
 		
 		# If latched is true & and station is true: increase intensity
-		if orb.station == true && latched_orb == true:
+		if orb.station == true && latched == true:
 			#$Area2D/CollisionShape2D.disabled = false
 			orb.intensity = orb.station_intensity
+			influence = 1.0 - (distance / orb.influence_station_radius) ** 16.0
 			direction = (orb.global_position - global_position).normalized()
-			force_vec = g * mass * orb.mass / distance_sq * direction * influence
+			force_vec = g * mass * orb.mass / distance_sq * direction * influence * 10
 			force += force_vec
 			return force
-		elif orb.station == true && latched_orb == false:
+		elif orb.station == true && latched == false:
 			#$Area2D/CollisionShape2D.disabled = true
 			orb.intensity = orb.inactive_intensity
 			#print(orb.intensity)
