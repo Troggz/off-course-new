@@ -201,6 +201,13 @@ func draw_arcs() -> void:
 			orb_arcs.append(arc)
 
 
+signal bounced(impact_speed: float)
+func bounce(normal: Vector2, incidence: Vector2) -> void:
+	super (normal, incidence)
+	if not dead:
+		bounced.emit(incidence.length())
+
+
 signal die
 func _on_die() -> void:
 	call_deferred("do_death")
