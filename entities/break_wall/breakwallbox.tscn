@@ -1,0 +1,21 @@
+[gd_scene format=4 uid="uid://dgacp7ey57ftx"]
+
+[ext_resource type="Script" uid="uid://7jnrkbjvbqnf" path="res://entities/break_wall/breakwallbox.gd" id="1_8ovyv"]
+[ext_resource type="TileSet" uid="uid://c5uikkyewmdrs" path="res://entities/break_wall/breakablewall.tres" id="2_8ovyv"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_c3fae"]
+
+[node name="BreakWall" type="StaticBody2D" unique_id=1878800002]
+collision_layer = 4
+collision_mask = 4
+script = ExtResource("1_8ovyv")
+tile_size = Vector2i(4, 2)
+
+[node name="TileMapLayer" type="TileMapLayer" parent="." unique_id=1503344398]
+tile_map_data = PackedByteArray("AAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAACAAAAAAAAAAAAAAADAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAABAAEAAAAAAAAAAAACAAEAAAAAAAAAAAADAAEAAAAAAAAAAAAEAAEAAAAAAAAAAAAAAAIAAAAAAAAAAAABAAIAAAAAAAAAAAACAAIAAAAAAAAAAAADAAIAAAAAAAAAAAAEAAIAAAAAAAAAAAA=")
+tile_set = ExtResource("2_8ovyv")
+
+[node name="IgnoreBox" type="CollisionShape2D" parent="." unique_id=628609830]
+visible = false
+shape = SubResource("RectangleShape2D_c3fae")
+disabled = true

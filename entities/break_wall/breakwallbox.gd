@@ -64,4 +64,5 @@ var broke := false:
 
 func break_wall() -> void:
 	tile_map.clear()
+	get_tree().create_timer(0.025, true, false, false).timeout
 	return

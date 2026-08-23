@@ -199,7 +199,7 @@ animations = [{
 }]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_8fjmc"]
-radius = 13.0
+radius = 16.0
 
 [node name="Player" unique_id=1039897982 groups=["player"] instance=ExtResource("1_symyc")]
 mass = 0.75
@@ -222,7 +222,7 @@ Can_NWSE = false
 lives = 3
 knockback_type = 2
 knockback_multiplier = 1.5
-knockback_speed = 25
+knockback_speed = 50
 dash_type = 2
 dash_application = 2
 dash_multiplier = 2.0
@@ -232,7 +232,7 @@ dash_orbit_time = 3.0
 slow_application = 2
 slow_multiplier = 0.9
 slow_speed = 5.0
-break_speed = 300
+break_speed = 200
 break_time = 0.05
 radius = 8.0
 
@@ -240,7 +240,6 @@ radius = 8.0
 visible = false
 
 [node name="CollisionShape" parent="." index="1" unique_id=806147550]
-visible = false
 shape = SubResource("CircleShape2D_j3ovn")
 
 [node name="Sprites" type="Node2D" parent="." index="2" unique_id=1297508990]
@@ -339,8 +338,14 @@ scale = Vector2(0.046874993, 0.042968765)
 texture = ExtResource("13_j3ovn")
 
 [node name="Area2D" parent="." index="13" unique_id=891432176]
+visible = false
+collision_layer = 0
+collision_mask = 0
 monitoring = false
 monitorable = false
+
+[node name="CollisionShape2D" parent="Area2D" index="0" unique_id=1647959809]
+visible = false
 
 [connection signal="die" from="." to="." method="_on_die"]
 [connection signal="area_entered" from="DangerArea" to="." method="_on_danger_area_area_entered"]

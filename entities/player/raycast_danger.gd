@@ -65,8 +65,15 @@ func _physics_process(_delta: float) -> void:
 						#print("vulnerable")
 				else:
 					#player.linear_velocity = (Vector2.ZERO - Vector2(x,y)).normalized() * (player.linear_velocity * 1)
-					player.linear_velocity = Vector2(cos(rotation), sin(rotation)) * player.linear_velocity.length()
-					player.linear_velocity = player.linear_velocity * 1
+					#player.linear_velocity = Vector2(cos(rotation), sin(rotation)) * player.linear_velocity.length()
+					#player.linear_velocity = player.linear_velocity * 1
+					
+					player.linear_velocity *= Vector2(cos(rotation), sin(rotation)).normalized()
+						
+					if player.knockback_type == 1:
+						player.linear_velocity = player.linear_velocity * player.knockback_multiplier
+					elif player.knockback_type == 2:
+						player.linear_velocity = player.linear_velocity.normalized() * player.knockback_speed
 					
 			else:
 				detect = true

@@ -389,16 +389,33 @@ func _on_death_audio_finished() -> void:
 
 func _on_danger_area_body_entered(_body) -> void:
 	var wall = _body.get_parent()
+	#linear_velocity = Vector2(0,0)
+	var old_velocity_wall := linear_velocity
+	#print(old_velocity_wall)
 	
 	if linear_velocity.length() >= break_speed:
+		#linear_velocity = Vector2(0,0)
 		
-		var old_velocity_wall := linear_velocity
-		linear_velocity = Vector2(0,0)
-		await get_tree().create_timer(0.025, true, false, false).timeout
+		#var old_velocity_wall := linear_velocity
+		#linear_velocity = Vector2(0,0)
+		#await get_tree().create_timer(0.025, true, false, false).timeout
 		#wall.broke = true
-		await wall.break_wall()
+		#await wall.break_wall()
+		#wall.break_wall()
+		##print("test")
+		set_deferred("freeze", true)
+		#await wall.break_wall()
+		#wall.queue_free()
+		wall.tile_map.clear()
+		await get_tree().create_timer(break_time, true, true, false).timeout
+		#await get_tree().create_timer(0.025, true, false, false).timeout
+		set_deferred("freeze", false)
 		linear_velocity = old_velocity_wall
-	
+		##print(old_velocity_wall)
+		##print(linear_velocity)
+		##await get_tree().create_timer(1, true, false, false).timeout
+		##print(linear_velocity)
+		
 	##if not dead:
 		##die.emit()
 	#pass
