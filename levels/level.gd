@@ -2,8 +2,6 @@ class_name Level
 extends Node2D
 
 @export var level: int
-@export var shake_min_speed: float = 40.0
-@export var shake_full_speed: float = 260.0
 
 @export var initial_dialogs: Array[String] = [
 	"A:Initiating level #{level}..."
@@ -405,7 +403,6 @@ func spawn_player(first_time: bool = false) -> void:
 	player.global_position = player_spawn.global_position
 	player.linear_velocity = player_velocity.position
 	player.die.connect(spawn_player_timed)
-	player.bounced.connect(_on_player_bounced)
 	add_child(player)
 	entrance_timer.start()
 
@@ -416,12 +413,6 @@ func _on_entrance_timeout() -> void:
 
 func _on_spawn_timer_timeout() -> void:
 	spawn_player()
-
-
-func _on_player_bounced(impact_speed: float) -> void:
-	if impact_speed < shake_min_speed:
-		return
-	camera.add_shake(inverse_lerp(shake_min_speed, shake_full_speed, impact_speed))
 
 
 func _on_finish_area_entered(body: Node2D) -> void:

@@ -1,7 +1,6 @@
 class_name Player
 extends Orb
 
-@export_group("Orb Properties")
 @export var rotation_factor: float = 0.95
 @export var trajectory_steps: int = 96
 @export var trajectory_step_size: float = 1.0 / 60.0
@@ -12,38 +11,12 @@ extends Orb
 @export var arcs: int = 12
 @export var arc_divisions: int = 8
 
-@export_group("Health Properties")
-# Related to hurtbox
-@export var invulnerable_time: float = 3 # Invulnerability time in seconds
-@export var hurt_radius: float = 9 # Length of the raycast
-@export var point_count: int = 16 # Precision of the raycast, more points = more precise redirection (but potentially more buggy)
-@export var Can_NWSE: bool # Determines whether the player can be redirected in true north, west, etc.
-# Set "Can_NWSE" to true if "point_count" = 4
-@export var lives: int = 3
-@export var reaction_multiplier = 1.5 # Bigger multi = Bigger reaction to hits
-
-# Related to dash mechanics
-@export_group("Dash_Properties")
-@export var dash_type: int # 1 = simple dash, 2 = orbit dash
-@export var dash_application: int
-@export var dash_multiplier: float
-@export var dash_speed: float
-@export var dash_cooldown: float = 3.0
-# Only for dash type 2:
-@export var dash_orbit_time: float = 3.0
-@export var dash_slow_multiplier: float = 0.90
-
 @onready var trajectory_probe: Orb = $TrajectoryProbe
 
 var unlatched_trajlines := []
 var latched_trajlines := []
 var latched := false
 var dead := false
-
-var invulnerable := false
-var can_dash := true
-var circle: Tween
-var latchable := true
 
 
 func _ready() -> void:
@@ -59,12 +32,7 @@ func _ready() -> void:
 
 var latch_time := 0.0
 func _process(delta: float) -> void:
-	
-	#print(linear_velocity.normalized())
-	#print(linear_velocity.length())
-	#print(linear_velocity)
-	
-	super(delta)
+	super (delta)
 	handle_rotation(delta)
 
 	# Because 7 8 9
@@ -72,7 +40,7 @@ func _process(delta: float) -> void:
 		$Sprites/Lupin.scale = Vector2(1.45, 1.45)
 
 	clear_arcs()
-	if latchable:
+	if not dead:
 		draw_trajectories()
 		draw_arcs()
 
@@ -101,90 +69,8 @@ func _process(delta: float) -> void:
 			$Sprites/DelatchSmoke.emitting = true
 			$Sprites/Front.modulate = Color(1.0, 1.0, 1.0)
 			$Sprites/Back.modulate = Color(1.0, 1.0, 1.0)
-				
 	else:
 		latched = false
-		clear_arcs()
-		
-	if Input.is_action_just_pressed("dash"):
-		if dash_type == 1 && can_dash == true:
-			can_dash = false
-			dash_processor(dash_application)
-			$Sprites/BoostSmoke.emitting = true
-			await get_tree().create_timer(dash_cooldown, true, false, false).timeout
-			can_dash = true
-			
-		elif dash_type == 2 && can_dash == true:
-			if circle == null:
-				active = false
-				latchable = false
-				linear_velocity *= dash_slow_multiplier
-				circle = create_tween()
-				circle.tween_property($Arrow, "rotation", deg_to_rad(360), dash_orbit_time)
-				circle.finished.connect(_on_orbit_finished)
-					
-			else:
-				if circle.is_running():
-					can_dash = false
-					circle.pause()
-					#print("Arrow rotation = ", $Arrow.rotation)
-					linear_velocity /= dash_slow_multiplier
-					dash_processor(dash_application)
-					linear_velocity = Vector2(cos($Arrow.rotation), sin($Arrow.rotation)) * linear_velocity.length()
-					$Sprites/BoostSmoke.emitting = true
-					$Arrow.rotation = 0
-					circle.kill()
-					latchable = true
-					active = true # active relates to orb gravity on or off
-					circle = null
-					await get_tree().create_timer(dash_cooldown, true, false, false).timeout
-					can_dash = true
-					
-	# Code for dash_type 3
-	if Input.is_action_just_pressed("up"):
-		third_dash(deg_to_rad(270))
-	elif Input.is_action_just_pressed("down"):
-		third_dash(deg_to_rad(90))
-	elif Input.is_action_just_pressed("left"):
-		third_dash(deg_to_rad(180))
-	elif Input.is_action_just_pressed("right"):
-		third_dash(deg_to_rad(0))
-		
-func dash_processor(type: int) -> void:
-	if dash_application == 1: # Current Speed is multiplied
-		linear_velocity *= dash_multiplier
-	elif dash_application == 2: # Replace current speed with dash speed
-		linear_velocity = linear_velocity.normalized() * dash_speed
-
-func third_dash(rad: float) -> void:
-	if dash_type == 3 && can_dash == true:
-		can_dash = false
-		dash_processor(dash_application)
-		linear_velocity = Vector2(cos(rad), sin(rad)) * linear_velocity.length()
-		$Sprites/BoostSmoke.emitting = true
-		await get_tree().create_timer(dash_cooldown, true, false, false).timeout
-		can_dash = true
-
-func dash_orbit() -> void:
-	if circle:
-		circle.kill()
-	circle = create_tween()
-	circle.tween_property($Arrow, "rotation", deg_to_rad(360), 2)
-	while circle.is_running():
-		await get_tree().process_frame
-	$Arrow.rotation = 0
-	print("boom")
-
-func _on_orbit_finished() -> void:
-	can_dash = false
-	circle.kill()
-	latchable = true
-	active = true
-	circle = null
-	$Arrow.rotation = 0
-	linear_velocity /= dash_slow_multiplier
-	await get_tree().create_timer(dash_cooldown, true, false, false).timeout
-	can_dash = true
 
 
 func handle_rotation(delta: float) -> void:
@@ -315,13 +201,6 @@ func draw_arcs() -> void:
 			orb_arcs.append(arc)
 
 
-signal bounced(impact_speed: float)
-func bounce(normal: Vector2, incidence: Vector2) -> void:
-	super (normal, incidence)
-	if not dead:
-		bounced.emit(incidence.length())
-
-
 signal die
 func _on_die() -> void:
 	call_deferred("do_death")
@@ -344,20 +223,11 @@ func do_death() -> void:
 
 	$DeathAudio.play()
 
-#func _on_danger_body_enter(_body: Node2D) -> void:
-	
-	##if not dead:
-		##die.emit()
-	#pass
+
+func _on_danger_body_enter(_body: Node2D) -> void:
+	if not dead:
+		die.emit()
 
 
 func _on_death_audio_finished() -> void:
 	queue_free()
-
-
-func _on_danger_area_body_entered(_body: Node2D) -> void:
-	print(_body)
-	
-	##if not dead:
-		##die.emit()
-	#pass

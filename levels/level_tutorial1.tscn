@@ -16,13 +16,6 @@
 [ext_resource type="Shader" uid="uid://c4kghet2pushk" path="res://levels/cutout.gdshader" id="14_2ugn6"]
 [ext_resource type="Texture2D" uid="uid://ce87nkgmd0um4" path="res://levels/transition.png" id="15_3xm22"]
 [ext_resource type="PackedScene" uid="uid://bnis4cd1e1kfr" path="res://entities/popup_panel/panel.tscn" id="16_panwl"]
-[ext_resource type="Script" uid="uid://dbag2p4arcmd2" path="res://levels/path_2d.gd" id="17_prev0"]
-
-[sub_resource type="Curve2D" id="Curve2D_panwl"]
-_data = {
-"points": PackedVector2Array(0, 0, 0, 0, 723, 135, 0, 0, 0, 0, 508, 135, 0, 0, 0, 0, 195, 135)
-}
-point_count = 3
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_hjsbj"]
 size = Vector2(96, 96)
@@ -302,23 +295,6 @@ animations = [{
 position = Vector2(0, -4)
 script = ExtResource("1_6bsxx")
 level = -1
-shake_min_speed = 100.0
-shake_full_speed = 250.0
-
-[node name="Path2D" type="Path2D" parent="." unique_id=1036073918]
-process_mode = 3
-curve = SubResource("Curve2D_panwl")
-script = ExtResource("17_prev0")
-warmup = 0.001
-duration = 5.0
-hold = 0.1
-
-[node name="PathFollow2D" type="PathFollow2D" parent="Path2D" unique_id=1432151897]
-position = Vector2(723, 135)
-rotates = false
-loop = false
-
-[node name="PreviewCamera" type="Camera2D" parent="Path2D/PathFollow2D" unique_id=1730254611]
 
 [node name="Parallax" type="CanvasLayer" parent="." unique_id=828582581]
 layer = -10
@@ -379,12 +355,7 @@ one_shot = true
 [node name="Camera" parent="PlayerSpawn" unique_id=404896124 instance=ExtResource("7_0nugw")]
 limit_left = 0
 limit_top = 0
-limit_right = 912
 limit_bottom = 260
-shake_decay = 10.0
-shake_max_offset = 10.0
-shake_falloff = 4.0
-shake_smoothing = 0.1
 metadata/_edit_lock_ = true
 
 [node name="Velocity" type="Marker2D" parent="PlayerSpawn" unique_id=344356292]
@@ -560,10 +531,10 @@ hold_time = 0.5
 anchors_preset = 0
 anchor_right = 0.0
 anchor_bottom = 0.0
-offset_left = 640.0
-offset_top = 115.0
-offset_right = 640.0
-offset_bottom = 115.0
+offset_left = 669.0
+offset_top = 113.0
+offset_right = 669.0
+offset_bottom = 113.0
 grow_horizontal = 1
 grow_vertical = 1
 scale = Vector2(2, 2)
