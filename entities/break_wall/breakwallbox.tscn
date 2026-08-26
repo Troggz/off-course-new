@@ -1,19 +1,24 @@
-[gd_scene format=4 uid="uid://dgacp7ey57ftx"]
+[gd_scene format=3 uid="uid://dgacp7ey57ftx"]
 
 [ext_resource type="Script" uid="uid://7jnrkbjvbqnf" path="res://entities/break_wall/breakwallbox.gd" id="1_8ovyv"]
 [ext_resource type="TileSet" uid="uid://c5uikkyewmdrs" path="res://entities/break_wall/breakablewall.tres" id="2_8ovyv"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_c3fae"]
 
+[sub_resource type="Curve" id="Curve_5cm8l"]
+_data = [Vector2(0.0042372867, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
 [node name="BreakWall" type="StaticBody2D" unique_id=1878800002]
 collision_layer = 4
 collision_mask = 4
 script = ExtResource("1_8ovyv")
-tile_size = Vector2i(4, 2)
+tile_size = Vector2i(1, 1)
 
 [node name="TileMapLayer" type="TileMapLayer" parent="." unique_id=1503344398]
-tile_map_data = PackedByteArray("AAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAACAAAAAAAAAAAAAAADAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAABAAEAAAAAAAAAAAACAAEAAAAAAAAAAAADAAEAAAAAAAAAAAAEAAEAAAAAAAAAAAAAAAIAAAAAAAAAAAABAAIAAAAAAAAAAAACAAIAAAAAAAAAAAADAAIAAAAAAAAAAAAEAAIAAAAAAAAAAAA=")
+tile_map_data = PackedByteArray(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0)
 tile_set = ExtResource("2_8ovyv")
+metadata/_edit_lock_ = true
 
 [node name="IgnoreBox" type="CollisionShape2D" parent="." unique_id=628609830]
 visible = false
@@ -21,3 +26,22 @@ shape = SubResource("RectangleShape2D_c3fae")
 disabled = true
 
 [node name="CPUParticles2D" type="CPUParticles2D" parent="." unique_id=1989874630]
+position = Vector2(16, 16)
+emitting = false
+amount = 100
+lifetime = 4.0
+one_shot = true
+explosiveness = 1.0
+lifetime_randomness = 1.0
+emission_shape = 3
+emission_rect_extents = Vector2(16, 16)
+direction = Vector2(0, 0)
+spread = 180.0
+gravity = Vector2(0, 0)
+initial_velocity_min = 50.0
+initial_velocity_max = 150.0
+angular_velocity_min = 50.0
+angular_velocity_max = 200.0
+scale_amount_max = 5.0
+scale_amount_curve = SubResource("Curve_5cm8l")
+color = Color(0.22959325, 0.22959325, 0.22959322, 1)

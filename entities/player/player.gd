@@ -413,7 +413,8 @@ func _on_danger_area_body_entered(_body) -> void:
 		#await wall.break_wall()
 		#wall.queue_free()
 		#wall.tile_map.clear()
-		wall.broke = true
+		#wall.broke = true
+		wall.break_wall()
 		await get_tree().create_timer(break_time, true, true, false).timeout
 		#await get_tree().create_timer(0.025, true, false, false).timeout
 		set_deferred("freeze", false)
@@ -444,3 +445,13 @@ func _on_danger_area_area_entered(area: Area2D) -> void:
 	circle.tween_property($Arrow, "rotation", deg_to_rad(360), current_station.orbit_time)
 	circle.tween_callback(func(): $Arrow.rotation = deg_to_rad(0))
 	
+
+func _on_danger_area_area_exited(area: Area2D) -> void:
+	if in_station == false:
+		return
+	
+	gravity_switch(true)
+	in_station = false
+	if circle:
+		circle.kill()
+	unlatch_appearence()

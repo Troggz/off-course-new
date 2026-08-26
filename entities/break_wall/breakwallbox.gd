@@ -35,6 +35,11 @@ extends StaticBody2D
 		
 		if not is_inside_tree():
 			await ready
+			
+		$CPUParticles2D.position = Vector2(((float(tile_size.x) + 1) * 16) / 2, ((float(tile_size.y) + 1) * 16) / 2)
+		$CPUParticles2D.emission_rect_extents = Vector2((float(tile_size.x) + 1) * 8, (float(tile_size.y) + 1) * 8)
+		#print("tilex ", (float(tile_size.x) + 1) * 16)
+		#print("part posx ", $CPUParticles2D.position.x)
 		
 		tile_map.clear()
 		
@@ -65,5 +70,6 @@ var broke := false:
 
 func break_wall() -> void:
 	tile_map.clear()
-	get_tree().create_timer(0.025, true, false, false).timeout
+	$CPUParticles2D.emitting = true
+	#get_tree().create_timer(0.025, true, false, false).timeout
 	return

@@ -368,25 +368,25 @@ position = Vector2(147, 163)
 freeze = true
 
 [node name="Orb3" parent="Objects" unique_id=980525846 instance=ExtResource("6_6b6na")]
-position = Vector2(1199, 144)
+position = Vector2(406, 143)
 freeze = true
 station = true
 influence_station_radius = 512.0
 station_intensity = 5.0
 station_speed = 600.0
-orbit_time = 0.5
+orbit_time = 2.0
 
 [node name="BreakWall2" parent="Objects" unique_id=1426081070 instance=ExtResource("7_xn44g")]
-position = Vector2(683, 68)
-tile_size = Vector2i(0, 9)
+position = Vector2(580, 59)
+tile_size = Vector2i(5, 9)
 
 [node name="BreakWall3" parent="Objects" unique_id=521097775 instance=ExtResource("7_xn44g")]
-position = Vector2(763, 69)
-tile_size = Vector2i(0, 9)
+position = Vector2(701, 64)
+tile_size = Vector2i(3, 9)
 
 [node name="BreakWall4" parent="Objects" unique_id=731123564 instance=ExtResource("7_xn44g")]
-position = Vector2(842, 72)
-tile_size = Vector2i(0, 9)
+position = Vector2(813, 65)
+tile_size = Vector2i(2, 9)
 
 [node name="BreakWall5" parent="Objects" unique_id=1992317645 instance=ExtResource("7_xn44g")]
 position = Vector2(919, 67)
