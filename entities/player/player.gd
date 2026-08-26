@@ -78,7 +78,8 @@ func _process(delta: float) -> void:
 
 		if check_collisions([trajectory_probe]):
 			die.emit()
-		if Input.is_action_just_pressed("latch"):
+		var latching := Input.is_action_pressed("latch")
+		if latching and not latched:
 			latched = true
 			latch_time = time
 		
@@ -89,7 +90,7 @@ func _process(delta: float) -> void:
 			$Sprites/LatchSmoke.emitting = true
 			$Sprites/Front.modulate = Color(1.0, 0.0, 0.0)
 			$Sprites/Back.modulate = Color(1.0, 0.0, 0.0)
-		if Input.is_action_just_released("latch"):
+		elif latched and not latching:
 			var boost := get_unlatch_boost()
 			latched = false
 			linear_velocity *= boost
@@ -312,6 +313,13 @@ func draw_arcs() -> void:
 			arc.z_index = -1
 			add_child(arc)
 			orb_arcs.append(arc)
+
+
+signal bounced(impact_speed: float)
+func bounce(normal: Vector2, incidence: Vector2) -> void:
+	super (normal, incidence)
+	if not dead:
+		bounced.emit(incidence.length())
 
 
 signal die
