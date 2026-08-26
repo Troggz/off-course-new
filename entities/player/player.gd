@@ -40,7 +40,7 @@ func _process(delta: float) -> void:
 		$Sprites/Lupin.scale = Vector2(1.45, 1.45)
 
 	clear_arcs()
-	if not dead:
+	if latchable:
 		draw_trajectories()
 		draw_arcs()
 
@@ -58,7 +58,7 @@ func _process(delta: float) -> void:
 			$Sprites/LatchSmoke.emitting = true
 			$Sprites/Front.modulate = Color(1.0, 0.0, 0.0)
 			$Sprites/Back.modulate = Color(1.0, 0.0, 0.0)
-		elif latched and not latching:
+		if Input.is_action_just_released("latch"):
 			var boost := get_unlatch_boost()
 			latched = false
 			linear_velocity *= boost
