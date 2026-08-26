@@ -3,11 +3,13 @@
 [ext_resource type="Script" uid="uid://do2or4ovxyerg" path="res://levels/level.gd" id="1_q6hb0"]
 [ext_resource type="PackedScene" uid="uid://ber2ukf0x5uaw" path="res://entities/parallax/parallax.tscn" id="2_xn44g"]
 [ext_resource type="TileSet" uid="uid://ibgnx2ymucbq" path="res://levels/tileset.tres" id="3_0h1oy"]
+[ext_resource type="PackedScene" uid="uid://srbglh2eokhd" path="res://entities/movable_spikes/move_spikes.tscn" id="4_0h1oy"]
 [ext_resource type="PackedScene" uid="uid://c3fqkueu71rf2" path="res://entities/door/door.tscn" id="4_22rus"]
+[ext_resource type="Script" uid="uid://iwkj4ifnvfbp" path="res://entities/movable_spikes/Vector2_Float.gd" id="5_22rus"]
 [ext_resource type="PackedScene" uid="uid://bk48wlfkg1p11" path="res://entities/button/button.tscn" id="5_um10w"]
 [ext_resource type="PackedScene" uid="uid://biotlhx7rd3hp" path="res://entities/orb/orb.tscn" id="6_6b6na"]
 [ext_resource type="PackedScene" uid="uid://dqaihh17n1f12" path="res://entities/camera/camera.tscn" id="7_ivsp5"]
-[ext_resource type="PackedScene" uid="uid://dgacp7ey57ftx" path="res://entities/breakwall/breakwallbox.tscn" id="7_xn44g"]
+[ext_resource type="PackedScene" uid="uid://dgacp7ey57ftx" path="res://entities/break_wall/breakwallbox.tscn" id="7_xn44g"]
 [ext_resource type="Texture2D" uid="uid://dvwe6yyf0dldh" path="res://levels/levels.png" id="8_5cm8l"]
 [ext_resource type="FontFile" uid="uid://cbptoha0rsyl" path="res://levels/unifont.ttf" id="9_w6hv1"]
 [ext_resource type="Texture2D" uid="uid://cndbn1jeog6o1" path="res://levels/loop.png" id="10_uqwsx"]
@@ -16,6 +18,30 @@
 [ext_resource type="Texture2D" uid="uid://h23juck7fdud" path="res://levels/dialogue.png" id="13_5tmpm"]
 [ext_resource type="Shader" uid="uid://c4kghet2pushk" path="res://levels/cutout.gdshader" id="14_mowcb"]
 [ext_resource type="Texture2D" uid="uid://ce87nkgmd0um4" path="res://levels/transition.png" id="15_ef60m"]
+
+[sub_resource type="Resource" id="Resource_22rus"]
+resource_local_to_scene = true
+script = ExtResource("5_22rus")
+position = Vector2(259, 52)
+seconds = 1.0
+
+[sub_resource type="Resource" id="Resource_um10w"]
+resource_local_to_scene = true
+script = ExtResource("5_22rus")
+position = Vector2(267, 200)
+seconds = 1.0
+
+[sub_resource type="Resource" id="Resource_6b6na"]
+resource_local_to_scene = true
+script = ExtResource("5_22rus")
+position = Vector2(391, 202)
+seconds = 1.0
+
+[sub_resource type="Resource" id="Resource_ivsp5"]
+resource_local_to_scene = true
+script = ExtResource("5_22rus")
+position = Vector2(390, 42)
+seconds = 1.0
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_hjsbj"]
 size = Vector2(96, 96)
@@ -316,22 +342,58 @@ metadata/_edit_lock_ = true
 [node name="Objects" type="Node2D" parent="." unique_id=751271631]
 metadata/_edit_lock_ = true
 
+[node name="MoveSpikes" parent="Objects" unique_id=1599232744 instance=ExtResource("4_0h1oy")]
+position = Vector2(390, 42)
+loop_to_start = true
+tile_size = Vector2i(1, 1)
+coords_time = Array[ExtResource("5_22rus")]([SubResource("Resource_22rus"), SubResource("Resource_um10w"), SubResource("Resource_6b6na"), SubResource("Resource_ivsp5")])
+
+[node name="BreakWall" parent="Objects" unique_id=1878800002 instance=ExtResource("7_xn44g")]
+position = Vector2(39, 38)
+tile_size = Vector2i(2, 5)
+
 [node name="ExitDoor" parent="Objects" unique_id=1386707718 instance=ExtResource("4_22rus")]
-position = Vector2(471, 64)
+position = Vector2(1543, 63)
 
 [node name="Button" parent="Objects" unique_id=863652831 node_paths=PackedStringArray("door") instance=ExtResource("5_um10w")]
 position = Vector2(240, 248)
 door = NodePath("../ExitDoor")
 
 [node name="Orb" parent="Objects" unique_id=612294298 instance=ExtResource("6_6b6na")]
-position = Vector2(240, 144)
+position = Vector2(-641, 753)
 freeze = true
 
-[node name="Breakwallbox" parent="Objects" unique_id=263796788 instance=ExtResource("7_xn44g")]
-position = Vector2(291, 208)
+[node name="Orb2" parent="Objects" unique_id=794850524 instance=ExtResource("6_6b6na")]
+position = Vector2(147, 163)
+freeze = true
+
+[node name="Orb3" parent="Objects" unique_id=980525846 instance=ExtResource("6_6b6na")]
+position = Vector2(406, 143)
+freeze = true
+station = true
+influence_station_radius = 512.0
+station_intensity = 5.0
+station_speed = 600.0
+orbit_time = 2.0
+
+[node name="BreakWall2" parent="Objects" unique_id=1426081070 instance=ExtResource("7_xn44g")]
+position = Vector2(580, 59)
+tile_size = Vector2i(5, 9)
+
+[node name="BreakWall3" parent="Objects" unique_id=521097775 instance=ExtResource("7_xn44g")]
+position = Vector2(701, 64)
+tile_size = Vector2i(3, 9)
+
+[node name="BreakWall4" parent="Objects" unique_id=731123564 instance=ExtResource("7_xn44g")]
+position = Vector2(813, 65)
+tile_size = Vector2i(2, 9)
+
+[node name="BreakWall5" parent="Objects" unique_id=1992317645 instance=ExtResource("7_xn44g")]
+position = Vector2(919, 67)
+tile_size = Vector2i(0, 9)
 
 [node name="Map" type="TileMapLayer" parent="." unique_id=151676]
-tile_map_data = PackedByteArray("AAABABAAAgAWAAUAAAACABAAAgAWAAUAAAADABAAAgAWAAUAAAAEABAAAgAWAAUAAAAFABAAAgAWAAUAAAAGABAAAgAWAAUAAAAHABAAAgAWAAUAAAAIABAAAgAWAAUAAAAJABAAAgAWAAUAAAAKABAAAgAWAAUAAAALABAAAgAWAAUAAAAMABAAAgAWAAUAAAANABAAAgAWAAUAAAAOABAAAgAWAAUAAAAPABAAAgAWAAUAAAAQABAAAgAWAAUAAAARABAAAgAWAAUAAAASABAAAgAWAAUAAAATABAAAgAWAAUAAAAUABAAAgAWAAUAAAAVABAAAgAWAAUAAAAWABAAAgAWAAUAAAAXABAAAgAWAAUAAAAYABAAAgAWAAUAAAAZABAAAgAWAAUAAAAaABAAAgAWAAUAAAAbABAAAgAWAAUAAAAcABAAAgAWAAUAAAAAAAkAAgAXAAcAAAAAAAgAAgAXAAYAAAAAAAcAAgAXAAYAAAAAAAYAAgAXAAYAAAAAAAUAAgAXAAYAAAAAAAQAAgAXAAYAAAAAAAMAAgAXAAYAAAAAAAIAAgAXAAYAAAAAAAEAAgAXAAYAAAABAAAAAgAWAAcAAAACAAAAAgAWAAcAAAADAAAAAgAWAAcAAAAEAAAAAgAWAAcAAAAFAAAAAgAWAAcAAAAGAAAAAgAWAAcAAAAHAAAAAgAWAAcAAAAIAAAAAgAWAAcAAAAJAAAAAgAWAAcAAAAdAA8AAgAVAAYAAAAdAA4AAgAVAAYAAAAdAA0AAgAVAAYAAAAdAAwAAgAVAAYAAAAdAAsAAgAVAAYAAAAdAAoAAgAVAAYAAAAdAAkAAgAVAAYAAAAdAAgAAgAVAAYAAAAdAAcAAgAVAAUAAAAdAAAAAgAWAAcAAAAKAAAAAgAbAAUAAAALAAAAAgAbAAUAAAAMAAAAAgAbAAUAAAANAAAAAgAbAAUAAAAOAAAAAgAbAAUAAAAPAAAAAgAbAAUAAAAQAAAAAgAbAAUAAAARAAAAAgAbAAUAAAASAAAAAgAbAAUAAAATAAAAAgAbAAUAAAAUAAAAAgAbAAUAAAAVAAAAAgAbAAUAAAAWAAAAAgAbAAUAAAAXAAAAAgAbAAUAAAAYAAAAAgAbAAUAAAAZAAAAAgAbAAUAAAAaAAAAAgAbAAUAAAAbAAAAAgAbAAUAAAAcAAAAAgAbAAUAAAAdABAAAgAcAAcAAAAAAAAAAgAaAAUAAAAAABAAAgAbAAcAAAABAAIAAgAQAAEAAAABAAMAAgAQAAEAAAABAAQAAgAQAAEAAAABAAUAAgAQAAEAAAABAAYAAgAQAAEAAAABAAcAAgAQAAEAAAABAAgAAgAQAAEAAAA=")
+tile_map_data = PackedByteArray("AAABABAAAgAWAAUAAAACABAAAgAWAAUAAAADABAAAgAWAAUAAAAEABAAAgAWAAUAAAAFABAAAgAWAAUAAAAGABAAAgAWAAUAAAAHABAAAgAWAAUAAAAIABAAAgAWAAUAAAAJABAAAgAWAAUAAAAKABAAAgAWAAUAAAALABAAAgAWAAUAAAAMABAAAgAWAAUAAAANABAAAgAWAAUAAAAOABAAAgAWAAUAAAAPABAAAgAWAAUAAAAQABAAAgAWAAUAAAARABAAAgAWAAUAAAASABAAAgAWAAUAAAATABAAAgAWAAUAAAAUABAAAgAWAAUAAAAVABAAAgAWAAUAAAAWABAAAgAWAAUAAAAXABAAAgAWAAUAAAAYABAAAgAWAAUAAAAZABAAAgAWAAUAAAAaABAAAgAWAAUAAAAbABAAAgAWAAUAAAAcABAAAgAWAAUAAAAAAAkAAgAXAAcAAAAAAAgAAgAXAAYAAAAAAAcAAgAXAAYAAAAAAAYAAgAXAAYAAAAAAAUAAgAXAAYAAAAAAAQAAgAXAAYAAAAAAAMAAgAXAAYAAAAAAAIAAgAXAAYAAAAAAAEAAgAXAAYAAAABAAAAAgAWAAcAAAACAAAAAgAWAAcAAAADAAAAAgAWAAcAAAAEAAAAAgAWAAcAAAAFAAAAAgAWAAcAAAAGAAAAAgAWAAcAAAAHAAAAAgAWAAcAAAAIAAAAAgAWAAcAAAAJAAAAAgAWAAcAAAAKAAAAAgAbAAUAAAALAAAAAgAbAAUAAAAMAAAAAgAbAAUAAAANAAAAAgAbAAUAAAAOAAAAAgAbAAUAAAAPAAAAAgAbAAUAAAAQAAAAAgAbAAUAAAARAAAAAgAbAAUAAAASAAAAAgAbAAUAAAATAAAAAgAbAAUAAAAUAAAAAgAbAAUAAAAVAAAAAgAbAAUAAAAWAAAAAgAbAAUAAAAXAAAAAgAbAAUAAAAYAAAAAgAbAAUAAAAZAAAAAgAbAAUAAAAaAAAAAgAbAAUAAAAbAAAAAgAbAAUAAAAcAAAAAgAbAAUAAAAAAAAAAgAaAAUAAAAAABAAAgAbAAcAAAABAAIAAgAQAAEAAAABAAMAAgAQAAEAAAABAAQAAgAQAAEAAAABAAUAAgAQAAEAAAABAAYAAgAQAAEAAAABAAcAAgAQAAEAAAABAAgAAgAQAAEAAAAeAAAAAgAWAAcA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")
 tile_set = ExtResource("3_0h1oy")
 metadata/_edit_lock_ = true
 
@@ -355,7 +417,7 @@ metadata/_edit_lock_ = true
 position = Vector2(142, 0)
 
 [node name="FinishArea" type="Area2D" parent="." unique_id=753895989]
-position = Vector2(528, 64)
+position = Vector2(501, 358)
 
 [node name="CollisionShape" type="CollisionShape2D" parent="FinishArea" unique_id=262367061]
 shape = SubResource("RectangleShape2D_hjsbj")
