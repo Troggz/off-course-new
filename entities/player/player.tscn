@@ -197,14 +197,13 @@ animations = [{
 }]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_8fjmc"]
-radius = 18.027756
+radius = 8.5
 
 [node name="Player" unique_id=1039897982 groups=["player"] instance=ExtResource("1_symyc")]
 mass = 0.75
 contact_monitor = true
 max_contacts_reported = 1
 script = ExtResource("2_abrql")
-max_speed = 600
 rotation_factor = 0.95
 trajectory_steps = 96
 trajectory_step_size = 0.0166667
@@ -214,32 +213,14 @@ unlatching_boost = 1.1
 unlatching_time = 2.0
 arcs = 12
 arc_divisions = 8
-invulnerable_time = 3.0
-hurt_radius = 9.0
-point_count = 16
-Can_NWSE = false
-lives = 3
-knockback_type = 2
-knockback_multiplier = 1.5
-knockback_speed = 50
-dash_type = 2
-dash_application = 2
-dash_multiplier = 2.0
-dash_speed = 500.0
-dash_cooldown = 3.0
-dash_orbit_time = 3.0
-slow_application = 2
-slow_multiplier = 0.9
-slow_speed = 5.0
-break_speed = 200
-break_time = 0.05
 radius = 8.0
 
 [node name="Sprite" parent="." index="0" unique_id=139438059]
 visible = false
 
 [node name="CollisionShape" parent="." index="1" unique_id=806147550]
-shape = SubResource("CircleShape2D_j3ovn")
+visible = false
+shape = SubResource("CircleShape2D_7thud")
 
 [node name="Sprites" type="Node2D" parent="." index="2" unique_id=1297508990]
 
@@ -312,25 +293,6 @@ stream = ExtResource("10_7thud")
 [node name="Particles" parent="." index="10" unique_id=875119314]
 visible = false
 
-[node name="Arrow" type="Node2D" parent="." index="12" unique_id=78158777]
-
-[node name="ArrowSprite" type="Sprite2D" parent="Arrow" index="0" unique_id=457934854]
-position = Vector2(15, 0)
-scale = Vector2(0.046874993, 0.042968765)
-texture = ExtResource("13_j3ovn")
-
-[node name="Area2D" parent="." index="13" unique_id=891432176]
-visible = false
-collision_layer = 0
-collision_mask = 0
-monitoring = false
-monitorable = false
-
-[node name="CollisionShape2D" parent="Area2D" index="0" unique_id=1647959809]
-visible = false
-
 [connection signal="die" from="." to="." method="_on_die"]
-[connection signal="area_entered" from="DangerArea" to="." method="_on_danger_area_area_entered"]
-[connection signal="area_exited" from="DangerArea" to="." method="_on_danger_area_area_exited"]
-[connection signal="body_entered" from="DangerArea" to="." method="_on_danger_area_body_entered"]
+[connection signal="body_entered" from="DangerArea" to="." method="_on_danger_body_enter"]
 [connection signal="finished" from="DeathAudio" to="." method="_on_death_audio_finished"]

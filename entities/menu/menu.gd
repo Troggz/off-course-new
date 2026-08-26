@@ -16,4 +16,4 @@ func _process(_delta: float) -> void:
 
 func _on_transition_animation_finished() -> void:
 	if $CanvasLayer/Transition.animation == "close":
-		get_tree().change_scene_to_file("res://entities/opening_comic/opening_comic.tscn")
+		SceneManager.start_game()

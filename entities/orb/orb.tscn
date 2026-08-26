@@ -82,9 +82,6 @@ _limits = [-360.0, 360.0, 0.0, 1.0]
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.148418, -124.59), 0.0, 0.0, 0, 0, Vector2(0.452555, 242.127), 0.0, 0.0, 0, 0, Vector2(0.542579, -290.469), 0.0, 0.0, 0, 0, Vector2(0.987835, 338.881), 0.0, 0.0, 0, 0]
 point_count = 5
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_c3fae"]
-radius = 16.03122
-
 [node name="Orb" type="RigidBody2D" unique_id=794850524 groups=["orbs"]]
 physics_material_override = SubResource("PhysicsMaterial_h8qx5")
 gravity_scale = 0.0
@@ -127,13 +124,5 @@ angle_max = 200.0
 angle_curve = SubResource("Curve_b6827")
 scale_amount_min = 0.5
 scale_amount_max = 1.5
-
-[node name="Area2D" type="Area2D" parent="." unique_id=891432176]
-collision_layer = 4
-collision_mask = 4
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=1647959809]
-shape = SubResource("CircleShape2D_c3fae")
-disabled = true
 
 [connection signal="body_shape_entered" from="." to="." method="_on_body_shape_entered"]
