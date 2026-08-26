@@ -1,6 +1,8 @@
 class_name Player
 extends Orb
 
+@export var max_speed := 600
+
 @export_group("Orb Properties")
 @export var rotation_factor: float = 0.95
 @export var trajectory_steps: int = 96
@@ -70,6 +72,9 @@ func _ready() -> void:
 var latch_time := 0.0
 func _process(delta: float) -> void:
 	
+	if linear_velocity.length() > max_speed:
+		linear_velocity = linear_velocity.normalized() * max_speed
+	
 	#print(linear_velocity.normalized())
 	#print(linear_velocity.length())
 	#print(linear_velocity)
@@ -102,6 +107,7 @@ func _process(delta: float) -> void:
 			$Sprites/Back.modulate = Color(1.0, 0.0, 0.0)
 		if Input.is_action_just_released("latch"):
 			var boost := get_unlatch_boost()
+			#print("boost ", boost)
 			latched = false
 			linear_velocity *= boost
 			
@@ -406,7 +412,8 @@ func _on_danger_area_body_entered(_body) -> void:
 		set_deferred("freeze", true)
 		#await wall.break_wall()
 		#wall.queue_free()
-		wall.tile_map.clear()
+		#wall.tile_map.clear()
+		wall.broke = true
 		await get_tree().create_timer(break_time, true, true, false).timeout
 		#await get_tree().create_timer(0.025, true, false, false).timeout
 		set_deferred("freeze", false)

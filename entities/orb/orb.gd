@@ -112,13 +112,6 @@ func gravitate(exclusions: Array = []) -> Vector2:
 		var distance_sq := (orb.global_position - global_position).length_squared()
 		var distance := sqrt(distance_sq)
 		
-		#if short_distance < distance:
-			#short_distance = distance
-			#nearest_orb = orb
-			#if nearest_orb.station == true:
-				#nearest_orb.intensity = 1
-			#nearest_orb = orb
-
 		if distance > orb.influence_radius:
 			continue
 		
@@ -134,12 +127,12 @@ func gravitate(exclusions: Array = []) -> Vector2:
 			orb.intensity = orb.station_intensity
 			influence = 1.0 - (distance / orb.influence_station_radius) ** 16.0
 			direction = (orb.global_position - global_position).normalized()
-			force_vec = g * mass * orb.mass / distance_sq * direction * influence * 10
+			force_vec = g * mass * orb.mass / distance_sq * direction * influence * 2
 			force += force_vec
 			return force
 		elif orb.station == true && latched == false:
 			#$Area2D/CollisionShape2D.disabled = true
-			orb.intensity = orb.inactive_intensity
+			#orb.intensity = orb.inactive_intensity
 			#print(orb.intensity)
 			continue
 		

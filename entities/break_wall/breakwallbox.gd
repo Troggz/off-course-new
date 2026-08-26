@@ -61,6 +61,7 @@ var broke := false:
 	set(value):
 		broke = value
 		tile_map.clear()
+		
 
 func break_wall() -> void:
 	tile_map.clear()

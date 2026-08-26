@@ -19,3 +19,5 @@ tile_set = ExtResource("2_8ovyv")
 visible = false
 shape = SubResource("RectangleShape2D_c3fae")
 disabled = true
+
+[node name="CPUParticles2D" type="CPUParticles2D" parent="." unique_id=1989874630]
