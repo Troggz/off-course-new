@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://dgacp7ey57ftx"]
 
-[ext_resource type="Script" uid="uid://7jnrkbjvbqnf" path="res://entities/break_wall/breakwallbox.gd" id="1_8ovyv"]
+[ext_resource type="Script" uid="uid://7maoexoto6rj" path="res://entities/break_wall/breakwallbox.gd" id="1_8ovyv"]
 [ext_resource type="TileSet" uid="uid://c5uikkyewmdrs" path="res://entities/break_wall/breakablewall.tres" id="2_8ovyv"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_c3fae"]

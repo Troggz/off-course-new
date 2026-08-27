@@ -94,7 +94,6 @@ func bounce(normal: Vector2, incidence: Vector2) -> void:
 		#linear_velocity = incidence.bounce(normal)
 		#position += linear_velocity / 120.0
 
-
 func gravitate(exclusions: Array = []) -> Vector2:
 	if freeze:
 		return Vector2(0.0, 0.0)

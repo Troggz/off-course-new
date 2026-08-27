@@ -1,6 +1,6 @@
 [gd_scene format=4 uid="uid://srbglh2eokhd"]
 
-[ext_resource type="Script" uid="uid://chjcp2jgu5mp" path="res://entities/movable_spikes/move_spikes.gd" id="1_702fe"]
+[ext_resource type="Script" uid="uid://cnc0x15wjm2gv" path="res://entities/movable_spikes/move_spikes.gd" id="1_702fe"]
 [ext_resource type="TileSet" uid="uid://ibgnx2ymucbq" path="res://levels/tileset.tres" id="2_q21m4"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_c3fae"]
