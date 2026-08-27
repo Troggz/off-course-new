@@ -235,6 +235,7 @@ slow_multiplier = 0.9
 slow_speed = 5.0
 break_speed = 200
 break_time = 0.05
+trail_interval = 0.05
 radius = 8.0
 
 [node name="Sprite" parent="." index="0" unique_id=139438059]
@@ -313,6 +314,7 @@ collision_mask = 2
 script = ExtResource("9_a1qjk")
 
 [node name="DangerArea" type="Area2D" parent="." index="5" unique_id=409287025]
+visible = false
 collision_layer = 4
 collision_mask = 4
 
@@ -342,8 +344,6 @@ texture = ExtResource("13_j3ovn")
 visible = false
 collision_layer = 0
 collision_mask = 0
-monitoring = false
-monitorable = false
 
 [node name="CollisionShape2D" parent="Area2D" index="0" unique_id=1647959809]
 visible = false

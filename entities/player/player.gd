@@ -58,6 +58,14 @@ var old_velocity : float
 var in_station := false
 var current_station : Orb = null
 
+var spritearray : Array[DiffSprite]
+var fade: Tween
+var active_fades: Array[Tween] = []
+
+@export_group("Trail Properties")
+@export var trail_interval: float = 0.1
+var trail_timer := 0.0
+
 func _ready() -> void:
 	if Global.lupin == 3:
 		$Sprites/Lupin.play("third")
@@ -67,9 +75,38 @@ func _ready() -> void:
 			var line := Line2D.new()
 			add_child(line)
 			trajlines.append(line)
+			
+	SetupSprites()
 
+func SetupSprites() -> void:
+	
+	for i in 10:
+		var diff : DiffSprite = DiffSprite.new()
+		
+		#var back : Sprite2D = $Sprites/Back.duplicate()
+		#var lupin : AnimatedSprite2D = $Sprites/Lupin.duplicate()
+		#var front : AnimatedSprite2D = $Sprites/Front.duplicate()
+		
+		diff.back = $Sprites/Back.duplicate()
+		diff.lupin = $Sprites/Lupin.duplicate()
+		diff.front = $Sprites/Front.duplicate()
+		
+		diff.lupin.stop()
+		diff.front.stop()
+		diff.lupin.z_index = 0
+		diff.front.z_index = 0
+		
+		diff.back.modulate.a = 0
+		diff.lupin.modulate.a = 0
+		diff.front.modulate.a = 0
+		get_tree().root.add_child.call_deferred(diff.back)
+		get_tree().root.add_child.call_deferred(diff.lupin)
+		get_tree().root.add_child.call_deferred(diff.front)
+		spritearray.append(diff)
+		
 
 var latch_time := 0.0
+var spritebunch : DiffSprite = DiffSprite.new()
 func _process(delta: float) -> void:
 	
 	if linear_velocity.length() > max_speed:
@@ -179,6 +216,117 @@ func _process(delta: float) -> void:
 		third_dash(deg_to_rad(180))
 	elif Input.is_action_just_pressed("right"):
 		third_dash(deg_to_rad(0))
+	
+	#if (get_tree().get_frame() % 6) == 0:
+		#print
+		
+	trail_timer -= delta
+	if trail_timer <= 0.0:
+		trail_timer = trail_interval
+		
+		if spritearray.is_empty() == false:
+			#print(spritearray)
+			#print("stes")
+			#var spritebunch : DiffSprite = DiffSprite.new()
+			
+			spritebunch = spritearray.pop_front() as DiffSprite
+			spritebunch.back.visible = true
+			spritebunch.lupin.visible = true
+			spritebunch.front.visible = true
+			
+			spritebunch.back.rotation = $Sprites.rotation
+			spritebunch.lupin.rotation = $Sprites.rotation
+			spritebunch.front.rotation = $Sprites.rotation
+			#print(spritebunch.back)
+			
+			spritebunch.lupin.animation = $Sprites/Lupin.animation
+			spritebunch.lupin.frame = $Sprites/Lupin.frame
+			spritebunch.front.animation = $Sprites/Front.animation
+			spritebunch.front.frame = $Sprites/Front.frame
+		
+			spritebunch.back.global_position = global_position #+ spritebunch.back.position
+			spritebunch.lupin.global_position = global_position #+ spritebunch.lupin.position
+			spritebunch.front.global_position = global_position #+ spritebunch.front.position
+			
+			if linear_velocity.length() > 250:
+				fade = get_tree().create_tween()
+				fade.tween_method(adjust_alpha.bind(spritebunch), 0.5, 0.0, 0.5)
+			
+			spritearray.append(spritebunch)
+	#else:
+		#trail_timer = 0.0
+	
+	#if linear_velocity.length() > 100:
+		##if (get_tree().get_frame() % 6) == 0:
+		#if true:
+			##print("test")
+			#if spritearray.is_empty() == false:
+				##print("stes")
+				##var spritebunch : DiffSprite = DiffSprite.new()
+				#
+				#spritebunch = spritearray.pop_front() as DiffSprite
+				#spritebunch.back.visible = true
+				#spritebunch.lupin.visible = true
+				#spritebunch.front.visible = true
+				#
+				#spritebunch.back.rotation = $Sprites.rotation
+				#spritebunch.lupin.rotation = $Sprites.rotation
+				#spritebunch.front.rotation = $Sprites.rotation
+				##print(spritebunch.back)
+				#
+				#spritebunch.lupin.animation = $Sprites/Lupin.animation
+				#spritebunch.lupin.frame = $Sprites/Lupin.frame
+				#spritebunch.front.animation = $Sprites/Front.animation
+				#spritebunch.front.frame = $Sprites/Front.frame
+				#
+				#spritebunch.back.global_position = global_position #+ spritebunch.back.position
+				#spritebunch.lupin.global_position = global_position #+ spritebunch.lupin.position
+				#spritebunch.front.global_position = global_position #+ spritebunch.front.position
+				#
+				##spritebunch.back.modulate.a = 1
+				##spritebunch.lupin.modulate.a = 1
+				##spritebunch.front.modulate.a = 1
+				#
+				##var fade = get_tree().create_tween()
+				##fade.set_parallel(true)
+				##fade.tween_property(spritebunch.back, "modulate:a", 0.0, 0.5)
+				##fade.tween_property(spritebunch.lupin, "modulate:a", 0.0, 0.5)
+				##fade.tween_property(spritebunch.front, "modulate:a", 0.0, 0.5)
+				#
+				#fade = get_tree().create_tween()
+				#active_fades.append(fade)
+				#fade.tween_method(adjust_alpha.bind(spritebunch), 0.5, 0.0, 0.5)
+				#fade.finished.connect(func(): active_fades.erase(fade))
+				#
+				##print(spritebunch.back.global_position)
+				#
+				##await get_tree().create_timer(1.0).timeout
+				#spritearray.append(spritebunch)
+	#else:
+		#for i in active_fades:
+			#if i.is_valid():
+				#i.kill()
+		#active_fades.clear()
+		#
+		##if fade && fade.is_valid() && fade.is_playing():
+			##fade.kill()
+		#
+		#for i in spritearray:
+			#i.back.modulate.a = 0
+			#i.lupin.modulate.a = 0
+			#i.front.modulate.a = 0
+			#
+			#i.back.visible = false
+			#i.lupin.visible = false
+			#i.front.visible = false
+
+func adjust_alpha(value: float, spritebunch: DiffSprite):
+	if is_instance_valid(spritebunch.back):
+		spritebunch.back.modulate.a = value
+	if is_instance_valid(spritebunch.lupin):
+		spritebunch.lupin.modulate.a = value
+	if is_instance_valid(spritebunch.front):
+		spritebunch.front.modulate.a = value
 
 func _on_orbit_finished() -> void:
 	can_dash = false
@@ -402,6 +550,19 @@ func do_death() -> void:
 	gravity_switch(false)
 	$CollisionShape.disabled = true
 	linear_velocity = Vector2(0.0, 0.0)
+	
+	if fade && fade.is_valid():
+		fade.kill()
+	
+	for diff in spritearray:
+		if is_instance_valid(diff.back):
+			diff.back.queue_free()
+		if is_instance_valid(diff.lupin):
+			diff.lupin.queue_free()
+		if is_instance_valid(diff.front):
+			diff.front.queue_free()
+	
+	spritearray.clear()
 	
 	$Sprites/Back.hide()
 	$Sprites/Lupin.hide()
