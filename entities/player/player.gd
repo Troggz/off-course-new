@@ -56,7 +56,7 @@ var latchable := true
 var old_velocity : float
 
 var in_station := false
-var current_station : Orb
+var current_station : Orb = null
 
 func _ready() -> void:
 	if Global.lupin == 3:
@@ -97,6 +97,8 @@ func _process(delta: float) -> void:
 		if Input.is_action_just_pressed("latch"):
 			latched = true
 			latch_time = time
+			
+			#$DangerArea.monitoring = true
 
 			# var strength := gravitate().length() / 18.0
 			$LatchAudio.volume_db = 10.0 # log(strength) * 3.5
@@ -109,6 +111,7 @@ func _process(delta: float) -> void:
 			var boost := get_unlatch_boost()
 			#print("boost ", boost)
 			latched = false
+			#$DangerArea.monitoring = false
 			linear_velocity *= boost
 			
 			unlatch_appearence()
@@ -118,15 +121,18 @@ func _process(delta: float) -> void:
 		
 	if Input.is_action_just_pressed("dash") && latched == false:
 		if in_station == true:
-			circle.pause()
-			gravity_switch(true)
 			in_station = false
 			
-			unlatch_appearence()
+			latchable = true
+			for trajlines in [latched_trajlines, unlatched_trajlines]:
+				for line in trajlines:
+					line.show()
+			
 			player_direction($Arrow.rotation, 3)
 			circle.kill()
 			circle = null
 			$Arrow.rotation = 0
+			current_station = null
 		
 		elif dash_type == 1 && can_dash == true:
 			can_dash = false
@@ -269,6 +275,15 @@ static func calc_latch(force: Vector2, velocity: Vector2, latching: bool, unlatc
 
 
 func gravitate(exclusions: Array = []) -> Vector2:
+	if in_station == true:
+		var strength: float = 500
+		var damping: float = 50
+			
+		var to_target = current_station.global_position - global_position
+		var forcee = to_target * strength - linear_velocity * damping
+		#print(forcee)
+		return(forcee)
+	
 	return calc_latch(super (exclusions + [trajectory_probe]), linear_velocity, latched, unlatched_gravitation)
 
 signal bounced(impact_speed: float)
@@ -436,18 +451,21 @@ func _on_danger_area_body_entered(_body) -> void:
 		##die.emit()
 	#pass
 
-func _on_danger_area_area_entered(area: Area2D) -> void:
-	if latched == false:
-		return
+var enter: Tween
 
-	current_station = area.get_parent()
-	global_position == global_position # DO NOT DELETE
-	global_position = current_station.global_position
-	linear_velocity = Vector2(0,0)
-	gravity_switch(false)
-	latched = false
-	in_station = true
+func _on_danger_area_area_entered(area: Area2D) -> void:
+	if latched == false || in_station == true:
+		return
 	
+	in_station = true
+	current_station = area.get_parent()
+	
+	latchable = false
+	for trajlines in [latched_trajlines, unlatched_trajlines]:
+		for line in trajlines:
+			line.hide()
+	
+	unlatch_appearence()
 	circle = create_tween()
 	circle.set_loops()
 	circle.tween_property($Arrow, "rotation", deg_to_rad(360), current_station.orbit_time)
@@ -457,9 +475,16 @@ func _on_danger_area_area_entered(area: Area2D) -> void:
 func _on_danger_area_area_exited(area: Area2D) -> void:
 	if in_station == false:
 		return
-	
-	gravity_switch(true)
+		
 	in_station = false
+	current_station = null
+	#$DangerArea.monitoring = false
+	
+	latchable = true
+	for trajlines in [latched_trajlines, unlatched_trajlines]:
+		for line in trajlines:
+			line.show()
+	
 	if circle:
 		circle.kill()
-	unlatch_appearence()
+		$Arrow.rotation = deg_to_rad(0)

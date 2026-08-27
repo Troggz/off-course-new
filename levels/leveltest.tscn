@@ -368,12 +368,11 @@ position = Vector2(147, 163)
 freeze = true
 
 [node name="Orb3" parent="Objects" unique_id=980525846 instance=ExtResource("6_6b6na")]
-position = Vector2(406, 143)
+position = Vector2(993, 151)
 freeze = true
+influence_radius = 512.0
 station = true
-influence_station_radius = 512.0
-station_intensity = 5.0
-station_speed = 600.0
+station_speed = 400.0
 orbit_time = 2.0
 
 [node name="BreakWall2" parent="Objects" unique_id=1426081070 instance=ExtResource("7_xn44g")]
