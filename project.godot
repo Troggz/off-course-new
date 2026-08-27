@@ -31,6 +31,14 @@ window/size/viewport_width=480
 window/size/viewport_height=270
 window/stretch/mode="canvas_items"
 
+[editor]
+
+movie_writer/mix_rate=36000
+movie_writer/ogv/encoding_speed=2
+movie_writer/ogv/keyframe_interval=32
+movie_writer/movie_file="C:/Users/lenovo/Documents/GitHub/off-course-new/off-course-new/recordings/Tutorial_1.ogv"
+movie_writer/fps=30
+
 [input]
 
 latch={
@@ -64,4 +72,3 @@ renderer/rendering_method.mobile="gl_compatibility"
 textures/vram_compression/import_etc2_astc=true
 viewport/hdr_2d=true
 environment/defaults/default_clear_color=Color(0, 0, 0, 1)
-2d/snap/snap_2d_transforms_to_pixel=true

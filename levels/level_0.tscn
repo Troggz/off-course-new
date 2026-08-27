@@ -1,7 +1,6 @@
 [gd_scene format=4 uid="uid://c5elde1l5hneb"]
 
 [ext_resource type="PackedScene" uid="uid://delaxhx1j17tb" path="res://levels/level.tscn" id="1_eus5j"]
-[ext_resource type="PackedScene" uid="uid://f7vb3632flte" path="res://levels/level_1.tscn" id="2_823pn"]
 [ext_resource type="PackedScene" uid="uid://biotlhx7rd3hp" path="res://entities/orb/orb.tscn" id="3_iss0w"]
 [ext_resource type="PackedScene" uid="uid://c3fqkueu71rf2" path="res://entities/door/door.tscn" id="4_foxie"]
 [ext_resource type="PackedScene" uid="uid://bk48wlfkg1p11" path="res://entities/button/button.tscn" id="5_7d3si"]
@@ -413,8 +412,13 @@ animations = [{
 "speed": 5.0
 }]
 
+[sub_resource type="Curve2D" id="Curve2D_dm5o4"]
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 574, -230, 0, 0, 0, 0, 925, -235, 0, 0, 0, 0, 926, 165, 0, 0, 0, 0, 118, 165)
+}
+point_count = 4
+
 [node name="Level0" unique_id=1915727042 instance=ExtResource("1_eus5j")]
-next_scene = ExtResource("2_823pn")
 initial_dialogs = Array[String](["A:Experiment, Start.", "B:Here we goo"])
 
 [node name="ExitDoor4" parent="." index="0" unique_id=907555084 instance=ExtResource("4_foxie")]
@@ -524,3 +528,11 @@ texture = ExtResource("11_obtcn")
 position = Vector2(562, 61)
 rotation = -1.5708
 texture = ExtResource("11_obtcn")
+
+[node name="Path2D" parent="." index="14" unique_id=1036073918]
+curve = SubResource("Curve2D_dm5o4")
+duration = 7.0
+hold = 0.6
+
+[node name="PathFollow2D" parent="Path2D" index="0" unique_id=1432151897]
+position = Vector2(574, -230)

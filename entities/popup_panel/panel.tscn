@@ -4,6 +4,111 @@
 [ext_resource type="VideoStream" uid="uid://505llyowaoba" path="res://entities/popup_panel/2026-04-17-15-36-09.ogv" id="1_5rn1p"]
 [ext_resource type="Script" uid="uid://8tbabwaxooox" path="res://entities/popup_panel/panel.gd" id="1_c3mp2"]
 [ext_resource type="Script" uid="uid://d7up3pprl3ku" path="res://entities/popup_panel/area_2d.gd" id="1_dahr0"]
+[ext_resource type="Texture2D" uid="uid://bb66ee5o0tmgd" path="res://ui/buttons/Keyboard Extras.png" id="2_0evpg"]
+[ext_resource type="VideoStream" uid="uid://yuiga4dlarbv" path="res://recordings/tutorial-1.ogv" id="2_trec1"]
+[ext_resource type="VideoStream" uid="uid://rql6jmrpgic1" path="res://recordings/tutorial_2.ogv" id="3_q0vca"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2hf7a"]
+atlas = ExtResource("2_0evpg")
+region = Rect2(64, 32, 32, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0evpg"]
+atlas = ExtResource("2_0evpg")
+region = Rect2(64, 96, 32, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_8jovo"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2hf7a")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0evpg")
+}],
+"loop": 0,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="Animation" id="Animation_7vgwd"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimatedSprite2D:sprite_frames")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [SubResource("SpriteFrames_8jovo")]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("AnimatedSprite2D:frame")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+
+[sub_resource type="Animation" id="Animation_hoap5"]
+resource_name = "space"
+length = 8.433333
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = false
+tracks/0/path = NodePath("AnimatedSprite2D:sprite_frames")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0.16666667, 1.3666667, 3),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [SubResource("SpriteFrames_8jovo"), SubResource("SpriteFrames_8jovo"), SubResource("SpriteFrames_8jovo")]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("AnimatedSprite2D:frame")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(-0.6333333, 1.4, 6.8),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [0, 1, 0]
+}
+
+[sub_resource type="Animation" id="Animation_0evpg"]
+resource_name = "space 2"
+length = 10.09
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimatedSprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 2.1, 7.3),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [0, 1, 0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_4i4wa"]
+_data = {
+&"RESET": SubResource("Animation_7vgwd"),
+&"tutorial_1": SubResource("Animation_hoap5"),
+&"tutorial_2": SubResource("Animation_0evpg")
+}
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_bjqgx"]
 size = Vector2(34, 36)
@@ -17,13 +122,21 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_c3mp2")
+clips = Dictionary[String, VideoStream]({
+"tutorial_1": ExtResource("2_trec1"),
+"tutorial_2": ExtResource("3_q0vca")
+})
+clip = "tutorial_1"
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1479993121]
+root_node = NodePath("../CanvasLayer")
+libraries/ = SubResource("AnimationLibrary_4i4wa")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=179906356]
 layer = 10
 script = ExtResource("1_3y6q4")
 
 [node name="Backdrop" type="ColorRect" parent="CanvasLayer" unique_id=397276275]
-visible = false
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -32,7 +145,6 @@ grow_vertical = 2
 color = Color(0, 0, 0, 0.5)
 
 [node name="Frame" type="Panel" parent="CanvasLayer" unique_id=719545235]
-visible = false
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
@@ -61,6 +173,11 @@ grow_vertical = 2
 stream = ExtResource("1_5rn1p")
 expand = true
 loop = true
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="CanvasLayer" unique_id=1364582435]
+position = Vector2(341, 195)
+scale = Vector2(2, 2)
+sprite_frames = SubResource("SpriteFrames_8jovo")
 
 [node name="Area2D" type="Area2D" parent="." unique_id=1253368264]
 script = ExtResource("1_dahr0")

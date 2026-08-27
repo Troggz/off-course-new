@@ -35,7 +35,7 @@ func get_interest(player: Player) -> Node2D:
 		return interest
 
 
-# Shake rides on `offset`, never `global_position`, so it never fights move().
+
 var trauma := 0.0
 func _process(delta: float) -> void:
 	if trauma <= 0.0 and offset.is_zero_approx():
