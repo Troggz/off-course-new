@@ -1,7 +1,6 @@
 [gd_scene format=4 uid="uid://f7vb3632flte"]
 
 [ext_resource type="PackedScene" uid="uid://delaxhx1j17tb" path="res://levels/level.tscn" id="1_vn7o3"]
-[ext_resource type="PackedScene" uid="uid://chun6t68qrex5" path="res://levels/level_2.tscn" id="2_08mmt"]
 [ext_resource type="PackedScene" uid="uid://biotlhx7rd3hp" path="res://entities/orb/orb.tscn" id="3_bt44k"]
 [ext_resource type="PackedScene" uid="uid://c3fqkueu71rf2" path="res://entities/door/door.tscn" id="3_n46q3"]
 [ext_resource type="PackedScene" uid="uid://bk48wlfkg1p11" path="res://entities/button/button.tscn" id="4_btoec"]
@@ -415,7 +414,6 @@ animations = [{
 
 [node name="Level1" unique_id=806951660 instance=ExtResource("1_vn7o3")]
 level = 1
-next_scene = ExtResource("2_08mmt")
 initial_dialogs = Array[String]([])
 
 [node name="Background" parent="." index="1" unique_id=1167429806]

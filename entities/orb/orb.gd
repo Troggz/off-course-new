@@ -29,6 +29,7 @@ func _process(delta: float) -> void:
 	$CollisionShape.shape.radius = radius
 	$Particles.color = color
 	$Sprite.modulate = color
+	$PointLight2D.color = color
 
 
 @onready var last_velocity := linear_velocity

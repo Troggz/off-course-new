@@ -82,6 +82,15 @@ _limits = [-360.0, 360.0, 0.0, 1.0]
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.148418, -124.59), 0.0, 0.0, 0, 0, Vector2(0.452555, 242.127), 0.0, 0.0, 0, 0, Vector2(0.542579, -290.469), 0.0, 0.0, 0, 0, Vector2(0.987835, 338.881), 0.0, 0.0, 0, 0]
 point_count = 5
 
+[sub_resource type="Gradient" id="Gradient_b6827"]
+offsets = PackedFloat32Array(0, 0.5671642)
+colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_8jovo"]
+gradient = SubResource("Gradient_b6827")
+fill = 1
+fill_from = Vector2(0.4778157, 0.46245733)
+
 [node name="Orb" type="RigidBody2D" unique_id=794850524 groups=["orbs"]]
 physics_material_override = SubResource("PhysicsMaterial_h8qx5")
 gravity_scale = 0.0
@@ -89,6 +98,7 @@ lock_rotation = true
 script = ExtResource("1_4ogyp")
 
 [node name="Sprite" type="AnimatedSprite2D" parent="." unique_id=139438059]
+light_mask = 2
 sprite_frames = SubResource("SpriteFrames_e34t8")
 autoplay = "default"
 frame_progress = 0.442961
@@ -124,5 +134,11 @@ angle_max = 200.0
 angle_curve = SubResource("Curve_b6827")
 scale_amount_min = 0.5
 scale_amount_max = 1.5
+
+[node name="PointLight2D" type="PointLight2D" parent="." unique_id=763685235]
+scale = Vector2(1.5, 1.5)
+energy = 0.53
+shadow_enabled = true
+texture = SubResource("GradientTexture2D_8jovo")
 
 [connection signal="body_shape_entered" from="." to="." method="_on_body_shape_entered"]
