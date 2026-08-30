@@ -48,6 +48,8 @@ func _ready():
 		$Area2D/CollisionShape2D.disabled = false
 		$Area2D/CollisionShape2D.shape.radius = station_radius
 		#print("coll area ", $Area2D.get_collision_layer_value(3))
+	
+	contact_monitor = true
 
 var time := 0.0
 func _process(delta: float) -> void:
@@ -56,16 +58,19 @@ func _process(delta: float) -> void:
 	$Particles.color = color
 	$Sprite.modulate = color
 
-
+var check := false
+var count := 0
+var par : Vector2
 @onready var last_velocity := linear_velocity
-func _physics_process(_delta: float) -> void:
+func _physics_process(_delta: float) -> void:	
 	if active:
-		#if station == true:
-			#pass
-		#else:
-			#apply_force(gravitate())
 		apply_force(gravitate())
-	last_velocity = linear_velocity
+	
+	#par = linear_velocity
+	#if check == true:
+		##print("asgwasdfaw")
+		##last_velocity = linear_velocity
+		#par = linear_velocity
 
 
 static var _debug_bounce_count := 0
@@ -123,7 +128,7 @@ func gravitate(exclusions: Array = []) -> Vector2:
 		
 		# If latched is true & and station is true: increase intensity
 		if orb.station == true && latched == true:
-			orb.get_node("Area2D").monitorable = true
+			#orb.get_node("Area2D").monitorable = true
 			#$Area2D/CollisionShape2D.disabled = false
 			#orb.intensity = orb.station_intensity
 			direction = (orb.global_position - global_position).normalized()
@@ -131,7 +136,7 @@ func gravitate(exclusions: Array = []) -> Vector2:
 			force += force_vec
 			return force
 		elif orb.station == true && latched == false:
-			orb.get_node("Area2D").monitorable = false
+			#orb.get_node("Area2D").monitorable = false
 			continue
 		
 		force += force_vec

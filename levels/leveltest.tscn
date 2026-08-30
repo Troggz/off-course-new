@@ -349,8 +349,8 @@ tile_size = Vector2i(1, 1)
 coords_time = Array[ExtResource("5_22rus")]([SubResource("Resource_22rus"), SubResource("Resource_um10w"), SubResource("Resource_6b6na"), SubResource("Resource_ivsp5")])
 
 [node name="BreakWall" parent="Objects" unique_id=1878800002 instance=ExtResource("7_xn44g")]
-position = Vector2(39, 38)
-tile_size = Vector2i(2, 5)
+position = Vector2(31, 96)
+tile_size = Vector2i(3, 5)
 
 [node name="ExitDoor" parent="Objects" unique_id=1386707718 instance=ExtResource("4_22rus")]
 position = Vector2(1543, 63)

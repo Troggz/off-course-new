@@ -67,6 +67,9 @@ var active_fades: Array[Tween] = []
 var trail_timer := 0.0
 
 func _ready() -> void:
+	
+	check = true
+	
 	if Global.lupin == 3:
 		$Sprites/Lupin.play("third")
 
@@ -75,10 +78,6 @@ func _ready() -> void:
 			var line := Line2D.new()
 			add_child(line)
 			trajlines.append(line)
-			
-	SetupSprites()
-
-func SetupSprites() -> void:
 	
 	for i in 10:
 		var diff : DiffSprite = DiffSprite.new()
@@ -103,7 +102,33 @@ func SetupSprites() -> void:
 		get_tree().root.add_child.call_deferred(diff.lupin)
 		get_tree().root.add_child.call_deferred(diff.front)
 		spritearray.append(diff)
-		
+
+#func SetupSprites() -> void:
+	#
+	#for i in 10:
+		#var diff : DiffSprite = DiffSprite.new()
+		#
+		##var back : Sprite2D = $Sprites/Back.duplicate()
+		##var lupin : AnimatedSprite2D = $Sprites/Lupin.duplicate()
+		##var front : AnimatedSprite2D = $Sprites/Front.duplicate()
+		#
+		#diff.back = $Sprites/Back.duplicate()
+		#diff.lupin = $Sprites/Lupin.duplicate()
+		#diff.front = $Sprites/Front.duplicate()
+		#
+		#diff.lupin.stop()
+		#diff.front.stop()
+		#diff.lupin.z_index = 0
+		#diff.front.z_index = 0
+		#
+		#diff.back.modulate.a = 0
+		#diff.lupin.modulate.a = 0
+		#diff.front.modulate.a = 0
+		#get_tree().root.add_child.call_deferred(diff.back)
+		#get_tree().root.add_child.call_deferred(diff.lupin)
+		#get_tree().root.add_child.call_deferred(diff.front)
+		#spritearray.append(diff)
+		#
 
 var latch_time := 0.0
 var spritebunch : DiffSprite = DiffSprite.new()
@@ -134,8 +159,6 @@ func _process(delta: float) -> void:
 		if Input.is_action_just_pressed("latch"):
 			latched = true
 			latch_time = time
-			
-			#$DangerArea.monitoring = true
 
 			# var strength := gravitate().length() / 18.0
 			$LatchAudio.volume_db = 10.0 # log(strength) * 3.5
@@ -144,6 +167,10 @@ func _process(delta: float) -> void:
 			$Sprites/LatchSmoke.emitting = true
 			$Sprites/Front.modulate = Color(1.0, 0.0, 0.0)
 			$Sprites/Back.modulate = Color(1.0, 0.0, 0.0)
+			
+			$DangerArea.monitoring = false
+			$DangerArea.monitoring = true
+		
 		if Input.is_action_just_released("latch"):
 			var boost := get_unlatch_boost()
 			#print("boost ", boost)
@@ -253,72 +280,6 @@ func _process(delta: float) -> void:
 				fade.tween_method(adjust_alpha.bind(spritebunch), 0.5, 0.0, 0.5)
 			
 			spritearray.append(spritebunch)
-	#else:
-		#trail_timer = 0.0
-	
-	#if linear_velocity.length() > 100:
-		##if (get_tree().get_frame() % 6) == 0:
-		#if true:
-			##print("test")
-			#if spritearray.is_empty() == false:
-				##print("stes")
-				##var spritebunch : DiffSprite = DiffSprite.new()
-				#
-				#spritebunch = spritearray.pop_front() as DiffSprite
-				#spritebunch.back.visible = true
-				#spritebunch.lupin.visible = true
-				#spritebunch.front.visible = true
-				#
-				#spritebunch.back.rotation = $Sprites.rotation
-				#spritebunch.lupin.rotation = $Sprites.rotation
-				#spritebunch.front.rotation = $Sprites.rotation
-				##print(spritebunch.back)
-				#
-				#spritebunch.lupin.animation = $Sprites/Lupin.animation
-				#spritebunch.lupin.frame = $Sprites/Lupin.frame
-				#spritebunch.front.animation = $Sprites/Front.animation
-				#spritebunch.front.frame = $Sprites/Front.frame
-				#
-				#spritebunch.back.global_position = global_position #+ spritebunch.back.position
-				#spritebunch.lupin.global_position = global_position #+ spritebunch.lupin.position
-				#spritebunch.front.global_position = global_position #+ spritebunch.front.position
-				#
-				##spritebunch.back.modulate.a = 1
-				##spritebunch.lupin.modulate.a = 1
-				##spritebunch.front.modulate.a = 1
-				#
-				##var fade = get_tree().create_tween()
-				##fade.set_parallel(true)
-				##fade.tween_property(spritebunch.back, "modulate:a", 0.0, 0.5)
-				##fade.tween_property(spritebunch.lupin, "modulate:a", 0.0, 0.5)
-				##fade.tween_property(spritebunch.front, "modulate:a", 0.0, 0.5)
-				#
-				#fade = get_tree().create_tween()
-				#active_fades.append(fade)
-				#fade.tween_method(adjust_alpha.bind(spritebunch), 0.5, 0.0, 0.5)
-				#fade.finished.connect(func(): active_fades.erase(fade))
-				#
-				##print(spritebunch.back.global_position)
-				#
-				##await get_tree().create_timer(1.0).timeout
-				#spritearray.append(spritebunch)
-	#else:
-		#for i in active_fades:
-			#if i.is_valid():
-				#i.kill()
-		#active_fades.clear()
-		#
-		##if fade && fade.is_valid() && fade.is_playing():
-			##fade.kill()
-		#
-		#for i in spritearray:
-			#i.back.modulate.a = 0
-			#i.lupin.modulate.a = 0
-			#i.front.modulate.a = 0
-			#
-			#i.back.visible = false
-			#i.lupin.visible = false
-			#i.front.visible = false
 
 func adjust_alpha(value: float, spritebunch: DiffSprite):
 	if is_instance_valid(spritebunch.back):
@@ -576,6 +537,22 @@ func do_death() -> void:
 func _on_death_audio_finished() -> void:
 	queue_free()
 
+#func _integrate_forces(state: PhysicsDirectBodyState2D) -> void:
+	#var wall = get_colliding_bodies()
+	#
+	#if wall.is_empty():
+		#return
+	#
+	#wall = wall.pop_front()
+	#wall = wall.get_parent()
+	#
+	#if wall.is_in_group("breakwall"):
+		#if linear_velocity.length() >= break_speed:
+			#wall.break_wall()
+			#print(par)
+			#state.linear_velocity = par
+		#else:
+			#wall.bounce_wall()
 
 func _on_danger_area_body_entered(_body) -> void:
 	var wall = _body.get_parent()
@@ -584,35 +561,15 @@ func _on_danger_area_body_entered(_body) -> void:
 	#print(old_velocity_wall)
 	
 	if linear_velocity.length() >= break_speed:
-		#linear_velocity = Vector2(0,0)
-		
-		#var old_velocity_wall := linear_velocity
-		#linear_velocity = Vector2(0,0)
-		#await get_tree().create_timer(0.025, true, false, false).timeout
-		#wall.broke = true
-		#await wall.break_wall()
-		#wall.break_wall()
-		##print("test")
 		set_deferred("freeze", true)
-		#await wall.break_wall()
-		#wall.queue_free()
-		#wall.tile_map.clear()
-		#wall.broke = true
 		wall.break_wall()
 		await get_tree().create_timer(break_time, true, true, false).timeout
-		#await get_tree().create_timer(0.025, true, false, false).timeout
 		set_deferred("freeze", false)
 		linear_velocity = old_velocity_wall
-		##print(old_velocity_wall)
-		##print(linear_velocity)
-		##await get_tree().create_timer(1, true, false, false).timeout
-		##print(linear_velocity)
 		
 	##if not dead:
 		##die.emit()
 	#pass
-
-var enter: Tween
 
 func _on_danger_area_area_entered(area: Area2D) -> void:
 	if latched == false || in_station == true:
@@ -631,7 +588,6 @@ func _on_danger_area_area_entered(area: Area2D) -> void:
 	circle.set_loops()
 	circle.tween_property($Arrow, "rotation", deg_to_rad(360), current_station.orbit_time)
 	circle.tween_callback(func(): $Arrow.rotation = deg_to_rad(0))
-	
 
 func _on_danger_area_area_exited(area: Area2D) -> void:
 	if in_station == false:

@@ -218,7 +218,7 @@ arcs = 12
 arc_divisions = 8
 invulnerable_time = 3.0
 hurt_radius = 9.0
-point_count = 16
+point_count = 32
 Can_NWSE = false
 lives = 3
 knockback_type = 2
@@ -310,6 +310,7 @@ active = false
 radius = 8.0
 
 [node name="DangerRaycast" type="RayCast2D" parent="." index="4" unique_id=743497495]
+target_position = Vector2(0, 15)
 collision_mask = 2
 script = ExtResource("9_a1qjk")
 
