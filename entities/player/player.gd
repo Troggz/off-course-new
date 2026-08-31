@@ -537,6 +537,7 @@ func _on_danger_area_body_entered(_body) -> void:
 		set_deferred("freeze", true)
 		wall.break_wall()
 		await get_tree().create_timer(break_time, true, true, false).timeout
+		emit_signal("bounced", linear_velocity.length())
 		set_deferred("freeze", false)
 		linear_velocity = old_velocity_wall
 		

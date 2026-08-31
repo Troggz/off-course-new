@@ -3,7 +3,7 @@ extends Control
 
 @export var clips: Dictionary[String, VideoStream] = {}
 @export var clip: String = ""
-@export var hold_time: float = 1.0
+@export var hold_time: float = 0.01
 
 @onready var video_stream_player: VideoStreamPlayer = $CanvasLayer/VideoStreamPlayer
 @onready var canvas_layer: CanvasLayer = $CanvasLayer
