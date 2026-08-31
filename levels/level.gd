@@ -364,7 +364,7 @@ var player: Player
 
 
 func _ready() -> void:
-	level_indicator.play(str(level))
+	update_level_indicator()
 	dialogs.set_queue(format_dialogs(initial_dialogs))
 
 	# Levels with a flythrough spawn when it lands, not on load.
@@ -378,6 +378,17 @@ func _ready() -> void:
 		preview.finished.connect(_on_preview_finished)
 	else:
 		spawn_player(true)
+
+
+# The tutorials (level < 0) have no plate of their own, so they hide the
+# indicator instead of showing whatever frame the scene was saved on.
+func update_level_indicator() -> void:
+	var plate := str(level)
+	if level < 0 or not level_indicator.sprite_frames.has_animation(plate):
+		level_indicator.hide()
+		return
+	level_indicator.show()
+	level_indicator.play(plate)
 
 
 func _on_preview_finished() -> void:

@@ -299,6 +299,8 @@ point_count = 2
 
 [node name="Level" type="Node2D" unique_id=349563626]
 script = ExtResource("1_dkmfj")
+level = -1
+initial_dialogs = Array[String]([])
 
 [node name="Parallax" type="CanvasLayer" parent="." unique_id=828582581]
 layer = -10

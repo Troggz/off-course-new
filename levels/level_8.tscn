@@ -14,7 +14,7 @@ _data = {
 point_count = 8
 
 [node name="Level2" unique_id=815616601 instance=ExtResource("1_4kux0")]
-level = 2
+level = 8
 initial_dialogs = Array[String](["A:Are we sure about this section?", "A:It seems a bit fast for them...", "B:SPEEDD"])
 
 [node name="Background" parent="." index="1" unique_id=1167429806]
