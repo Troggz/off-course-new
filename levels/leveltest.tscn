@@ -372,7 +372,6 @@ position = Vector2(993, 151)
 freeze = true
 influence_radius = 512.0
 station = true
-station_speed = 400.0
 orbit_time = 2.0
 
 [node name="BreakWall2" parent="Objects" unique_id=1426081070 instance=ExtResource("7_xn44g")]

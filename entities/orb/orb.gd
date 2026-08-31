@@ -16,7 +16,7 @@ extends RigidBody2D
 @export_group("Station Properties")
 @export var station: bool = false # Make orb a station or no
 #@export var influence_station_radius: float = 256.0 # Range in which station affects player
-@export var station_speed: float = 500.0 # Player speed given by station
+@export var station_dash_speed: float = 500.0 # Player speed given by station
 @export var orbit_time: float = 3.0 # Time taken for arrow to orbit player in a station
 @export var station_radius: float = 12.5 # Range the player's Area2D need to be in to enter the station
 

@@ -305,7 +305,7 @@ func dash_processor(type: int) -> void:
 	elif type == 2: # Replace current speed with dash speed
 		linear_velocity = linear_velocity.normalized() * dash_speed
 	elif type == 3: # For station dash speed
-		linear_velocity = linear_velocity.normalized() * current_station.station_speed
+		linear_velocity = linear_velocity.normalized() * current_station.station_dash_speed
 	$Sprites/BoostSmoke.emitting = true
 
 func unlatch_appearence() -> void:

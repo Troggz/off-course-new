@@ -197,7 +197,7 @@ animations = [{
 [sub_resource type="CircleShape2D" id="CircleShape2D_8fjmc"]
 radius = 18.027756
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_afbqv"]
+[sub_resource type="CircleShape2D" id="CircleShape2D_j3ovn"]
 resource_local_to_scene = true
 radius = 12.0
 
@@ -325,7 +325,7 @@ shape = SubResource("CircleShape2D_8fjmc")
 stream = ExtResource("7_qiwj3")
 
 [node name="CollisionShape" parent="." index="7" unique_id=806147550]
-shape = SubResource("CircleShape2D_afbqv")
+shape = SubResource("CircleShape2D_j3ovn")
 
 [node name="LatchAudio" type="AudioStreamPlayer2D" parent="." index="8" unique_id=1823070610]
 stream = ExtResource("9_wvtmh")
@@ -348,6 +348,9 @@ collision_layer = 0
 collision_mask = 0
 
 [node name="CollisionShape2D" parent="Area2D" index="0" unique_id=1647959809]
+visible = false
+
+[node name="PointLight2D" parent="." index="15" unique_id=1094592086]
 visible = false
 
 [connection signal="die" from="." to="." method="_on_die"]
