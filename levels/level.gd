@@ -364,14 +364,30 @@ var player: Player
 
 
 func _ready() -> void:
-	spawn_player(true)
 	level_indicator.play(str(level))
 	dialogs.set_queue(format_dialogs(initial_dialogs))
+
+	# Levels with a flythrough spawn when it lands, not on load.
+	var preview: LevelPreview = null
+	for child in get_children():
+		if child is LevelPreview:
+			preview = child
+			break
+
+	if preview != null:
+		preview.finished.connect(_on_preview_finished)
+	else:
+		spawn_player(true)
+
+
+func _on_preview_finished() -> void:
+	spawn_player(true)
 
 
 func _process(delta: float) -> void:
 	lupin_counter.text = "Lupin #%s" % Global.lupin
-	camera.move(delta, player)
+	if is_instance_valid(player):
+		camera.move(delta, player)
 
 
 func format_dialogs(array: Array):
@@ -441,4 +457,5 @@ func _on_loop_button_input_event(_viewport: Node, event: InputEvent, _shape_idx:
 			$CanvasLayer/LoopButton/Sprite.play("pressed")
 		else:
 			$CanvasLayer/LoopButton/Sprite.play("default")
-			player.die.emit()
+			if is_instance_valid(player):
+				player.die.emit()

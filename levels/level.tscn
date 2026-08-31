@@ -15,6 +15,7 @@
 [ext_resource type="FontFile" uid="uid://cbptoha0rsyl" path="res://levels/unifont.ttf" id="11_pb8y7"]
 [ext_resource type="Texture2D" uid="uid://h23juck7fdud" path="res://levels/dialogue.png" id="13_0qmeg"]
 [ext_resource type="Texture2D" uid="uid://ce87nkgmd0um4" path="res://levels/transition.png" id="14_d7v53"]
+[ext_resource type="Script" uid="uid://dbag2p4arcmd2" path="res://levels/path_2d.gd" id="15_prev0"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_hjsbj"]
 size = Vector2(96, 96)
@@ -502,6 +503,15 @@ autoplay = "open"
 frame = 7
 frame_progress = 1.0
 metadata/_edit_lock_ = true
+
+[node name="Path2D" type="Path2D" parent="." unique_id=1036073918]
+script = ExtResource("15_prev0")
+
+[node name="PathFollow2D" type="PathFollow2D" parent="Path2D" unique_id=1432151897]
+rotates = false
+loop = false
+
+[node name="PreviewCamera" type="Camera2D" parent="Path2D/PathFollow2D" unique_id=1730254611]
 
 [connection signal="timeout" from="EntranceDoor/Timer" to="." method="_on_entrance_timeout"]
 [connection signal="timeout" from="PlayerSpawn/Timer" to="." method="_on_spawn_timer_timeout"]

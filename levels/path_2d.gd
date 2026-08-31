@@ -1,9 +1,11 @@
 class_name LevelPreview
 extends Path2D
 
-# Flies a preview camera along this path before the level starts. Runs while the
-# tree is paused (Global.State.CUTSCENE), so this node needs Process Mode = Always.
+# Flies a preview camera along this path before the player spawns. The tree keeps
+# running normally — the level just holds its spawn back until `finished` fires.
 # The gameplay camera is left alone, so handing back to it is a cut, not a lerp.
+
+signal finished
 
 @export var gameplay_camera_path: NodePath = ^"../PlayerSpawn/Camera"
 @export var copy_camera_limits: bool = true
@@ -16,20 +18,26 @@ extends Path2D
 @onready var follow: PathFollow2D = $PathFollow2D
 @onready var preview_camera: Camera2D = $PathFollow2D/PreviewCamera
 
-# The screen wipe sits on a CanvasLayer, so it draws over the preview no matter
-# which camera is current. Paused it would stay frozen on its first, fully black
-# frame for the whole flythrough.
-@onready var transition: AnimatedSprite2D = get_node_or_null("../CanvasLayer/Transition")
-
 var elapsed := 0.0
 var running := false
 var warming := false
+var done := false
 
 
 func _ready() -> void:
+	# The node ships with every level, but a level only gets a flythrough if
+	# someone actually drew a path for it. An empty curve spawns straight away.
+	if curve == null or curve.point_count < 2:
+		set_process(false)
+		finish.call_deferred()
+		return
+
 	if gameplay_camera == null:
 		push_error("LevelPreview: no camera at %s" % gameplay_camera_path)
 		set_process(false)
+		# Deferred, so the level has connected to `finished` before it fires —
+		# otherwise a broken preview means the player never spawns at all.
+		finish.call_deferred()
 		return
 
 	follow.progress_ratio = 0.0
@@ -42,16 +50,9 @@ func _ready() -> void:
 		preview_camera.limit_bottom = gameplay_camera.limit_bottom
 		preview_camera.limit_smoothed = gameplay_camera.limit_smoothed
 	preview_camera.make_current()
-	if transition != null:
-		transition.process_mode = Node.PROCESS_MODE_ALWAYS
 
 	running = true
-	# Let the level tick unpaused for a moment first, so everything that paints
-	# itself in _process (orb colours, particles, parallax) is on screen before
-	# the freeze. Without this the orbs sit there uncoloured for the whole tour.
 	warming = warmup > 0.0
-	if not warming:
-		freeze_level()
 
 
 func _process(delta: float) -> void:
@@ -64,28 +65,26 @@ func _process(delta: float) -> void:
 
 	elapsed += delta
 
+	# A beat on the first point of the path before the camera starts moving.
 	if warming:
 		if elapsed >= warmup:
 			warming = false
 			elapsed = 0.0
-			freeze_level()
 		return
 
-	follow.progress_ratio = ease(clampf(elapsed / duration, 0.0, 1.0), -1.8)
+	follow.progress_ratio = clampf(elapsed / duration, 0.0, 1.0)
 
 	if elapsed >= duration + hold:
 		finish()
 
 
-func freeze_level() -> void:
-	Global.call_deferred("set_state", Global.State.CUTSCENE)
-
-
 func finish() -> void:
+	if done:
+		return
+	done = true
 	running = false
 	warming = false
 	set_process(false)
-	if transition != null:
-		transition.process_mode = Node.PROCESS_MODE_INHERIT
-	gameplay_camera.make_current()
-	Global.call_deferred("set_state", Global.State.PLAYING)
+	if gameplay_camera != null:
+		gameplay_camera.make_current()
+	finished.emit()

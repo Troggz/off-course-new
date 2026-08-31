@@ -103,33 +103,6 @@ func _ready() -> void:
 		get_tree().root.add_child.call_deferred(diff.front)
 		spritearray.append(diff)
 
-#func SetupSprites() -> void:
-	#
-	#for i in 10:
-		#var diff : DiffSprite = DiffSprite.new()
-		#
-		##var back : Sprite2D = $Sprites/Back.duplicate()
-		##var lupin : AnimatedSprite2D = $Sprites/Lupin.duplicate()
-		##var front : AnimatedSprite2D = $Sprites/Front.duplicate()
-		#
-		#diff.back = $Sprites/Back.duplicate()
-		#diff.lupin = $Sprites/Lupin.duplicate()
-		#diff.front = $Sprites/Front.duplicate()
-		#
-		#diff.lupin.stop()
-		#diff.front.stop()
-		#diff.lupin.z_index = 0
-		#diff.front.z_index = 0
-		#
-		#diff.back.modulate.a = 0
-		#diff.lupin.modulate.a = 0
-		#diff.front.modulate.a = 0
-		#get_tree().root.add_child.call_deferred(diff.back)
-		#get_tree().root.add_child.call_deferred(diff.lupin)
-		#get_tree().root.add_child.call_deferred(diff.front)
-		#spritearray.append(diff)
-		#
-
 var latch_time := 0.0
 var spritebunch : DiffSprite = DiffSprite.new()
 func _process(delta: float) -> void:
@@ -175,7 +148,6 @@ func _process(delta: float) -> void:
 			var boost := get_unlatch_boost()
 			#print("boost ", boost)
 			latched = false
-			#$DangerArea.monitoring = false
 			linear_velocity *= boost
 			
 			unlatch_appearence()
@@ -244,9 +216,6 @@ func _process(delta: float) -> void:
 	elif Input.is_action_just_pressed("right"):
 		third_dash(deg_to_rad(0))
 	
-	#if (get_tree().get_frame() % 6) == 0:
-		#print
-		
 	trail_timer -= delta
 	if trail_timer <= 0.0:
 		trail_timer = trail_interval
@@ -310,6 +279,7 @@ func interrupt_dash_2() -> void:
 			circle.kill()
 			circle = null
 			$Arrow.rotation = 0
+		gravity_switch(true)
 
 func third_dash(rad: float) -> void:
 	if dash_type == 3 && can_dash == true:
@@ -504,8 +474,22 @@ signal die
 func _on_die() -> void:
 	call_deferred("do_death")
 
+func _exit_tree() -> void:
+	if fade && fade.is_valid():
+		fade.kill()
+	
+	for diff in spritearray:
+		if is_instance_valid(diff.back):
+			diff.back.queue_free()
+		if is_instance_valid(diff.lupin):
+			diff.lupin.queue_free()
+		if is_instance_valid(diff.front):
+			diff.front.queue_free()
 
 func do_death() -> void:
+	#if is_inside_tree() == false:
+		#return
+	
 	latched = false
 	dead = true
 	gravity_switch(false)
@@ -531,28 +515,11 @@ func do_death() -> void:
 	$Sprites/DelatchSmoke.emitting = true
 	$Sprites/Front.modulate = Color(1.0, 1.0, 1.0)
 	$Sprites/Front.play("pop")
-
+	
 	$DeathAudio.play()
 
 func _on_death_audio_finished() -> void:
 	queue_free()
-
-#func _integrate_forces(state: PhysicsDirectBodyState2D) -> void:
-	#var wall = get_colliding_bodies()
-	#
-	#if wall.is_empty():
-		#return
-	#
-	#wall = wall.pop_front()
-	#wall = wall.get_parent()
-	#
-	#if wall.is_in_group("breakwall"):
-		#if linear_velocity.length() >= break_speed:
-			#wall.break_wall()
-			#print(par)
-			#state.linear_velocity = par
-		#else:
-			#wall.bounce_wall()
 
 func _on_danger_area_body_entered(_body) -> void:
 	var wall = _body.get_parent()
@@ -595,7 +562,6 @@ func _on_danger_area_area_exited(area: Area2D) -> void:
 		
 	in_station = false
 	current_station = null
-	#$DangerArea.monitoring = false
 	
 	latchable = true
 	for trajlines in [latched_trajlines, unlatched_trajlines]:
