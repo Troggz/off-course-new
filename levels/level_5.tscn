@@ -6,6 +6,12 @@
 [ext_resource type="PackedScene" uid="uid://bk48wlfkg1p11" path="res://entities/button/button.tscn" id="4_1y5xd"]
 [ext_resource type="Texture2D" uid="uid://cq1qn1bqe01t" path="res://entities/misc/exit.png" id="6_1y5xd"]
 
+[sub_resource type="Curve2D" id="Curve2D_26h77"]
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 1900, 80, 0, 0, 0, 0, 1388, 80, 0, 0, 0, 0, 1048, 80, 0, 0, 0, 0, 1048, 280, 0, 0, 0, 0, 104, 280, 0, 0, 0, 0, 104, 84, 0, 0, 0, 0, 596, 84, 0, 0, 0, 0, 596, -116)
+}
+point_count = 8
+
 [node name="Level5" unique_id=1103195699 instance=ExtResource("1_erq1u")]
 level = 5
 initial_dialogs = Array[String](["A:Wait...The Orbs...", "B:Yeah, they're outside", "Let's see if they can handle this."])
@@ -153,3 +159,10 @@ position = Vector2(-2, 189)
 
 [node name="FinishArea" parent="." index="7" unique_id=753895989]
 position = Vector2(655, 367)
+
+[node name="Path2D" parent="." index="9" unique_id=1036073918]
+curve = SubResource("Curve2D_26h77")
+duration = 10.0
+
+[node name="PathFollow2D" parent="Path2D" index="0" unique_id=1432151897]
+position = Vector2(1900, 80)

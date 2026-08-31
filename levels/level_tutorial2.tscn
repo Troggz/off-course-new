@@ -291,6 +291,12 @@ animations = [{
 "speed": 18.0
 }]
 
+[sub_resource type="Curve2D" id="Curve2D_5ward"]
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 283, -211, 0, 0, 0, 0, 284, 201)
+}
+point_count = 2
+
 [node name="Level" type="Node2D" unique_id=349563626]
 script = ExtResource("1_dkmfj")
 
@@ -516,9 +522,12 @@ frame_progress = 1.0
 metadata/_edit_lock_ = true
 
 [node name="Path2D" type="Path2D" parent="." unique_id=1036073918]
+curve = SubResource("Curve2D_5ward")
 script = ExtResource("16_prev0")
+duration = 5.0
 
 [node name="PathFollow2D" type="PathFollow2D" parent="Path2D" unique_id=1432151897]
+position = Vector2(283, -211)
 rotates = false
 loop = false
 

@@ -65,6 +65,7 @@ var active_fades: Array[Tween] = []
 @export_group("Trail Properties")
 @export var trail_interval: float = 0.1
 var trail_timer := 0.0
+@export var speed_req: float
 
 func _ready() -> void:
 	
@@ -247,7 +248,7 @@ func _process(delta: float) -> void:
 			spritebunch.lupin.global_position = global_position #+ spritebunch.lupin.position
 			spritebunch.front.global_position = global_position #+ spritebunch.front.position
 			
-			if linear_velocity.length() > 250:
+			if linear_velocity.length() >= speed_req:
 				fade = get_tree().create_tween()
 				fade.tween_method(adjust_alpha.bind(spritebunch), 0.5, 0.0, 0.5)
 			

@@ -62,6 +62,7 @@ func _process(delta: float) -> void:
 	#$CollisionShape.shape.radius = radius
 	$Particles.color = color
 	$Sprite.modulate = color
+	$PointLight2D.color = color
 
 var check := false
 var count := 0

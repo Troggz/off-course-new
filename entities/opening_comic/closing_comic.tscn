@@ -5,6 +5,7 @@
 [ext_resource type="Texture2D" uid="uid://ch3ir45o0klwu" path="res://entities/closing_comic/panel2.png" id="2_o5tic"]
 [ext_resource type="Texture2D" uid="uid://b8vvcocc68srt" path="res://entities/closing_comic/panel3.png" id="3_x2lpg"]
 [ext_resource type="Texture2D" uid="uid://3pnov08gw8rg" path="res://entities/closing_comic/panel4.png" id="4_ydild"]
+[ext_resource type="Texture2D" uid="uid://bb66ee5o0tmgd" path="res://ui/buttons/Keyboard Extras.png" id="6_x2lpg"]
 
 [sub_resource type="Animation" id="Animation_o5tic"]
 length = 0.001
@@ -222,6 +223,108 @@ _data = {
 &"panel4": SubResource("Animation_5hlnx")
 }
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_2hf7a"]
+atlas = ExtResource("6_x2lpg")
+region = Rect2(64, 32, 32, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0evpg"]
+atlas = ExtResource("6_x2lpg")
+region = Rect2(64, 96, 32, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_8jovo"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2hf7a")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0evpg")
+}],
+"loop": 0,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="Animation" id="Animation_7vgwd"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimationPlayer2/AnimatedSprite2D:sprite_frames")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [SubResource("SpriteFrames_8jovo")]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("AnimationPlayer2/AnimatedSprite2D:frame")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+
+[sub_resource type="Animation" id="Animation_hoap5"]
+resource_name = "space"
+length = 8.433333
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = false
+tracks/0/path = NodePath("AnimationPlayer2/AnimatedSprite2D:sprite_frames")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0.16666667, 1.3666667, 3),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [SubResource("SpriteFrames_8jovo"), SubResource("SpriteFrames_8jovo"), SubResource("SpriteFrames_8jovo")]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("AnimationPlayer2/AnimatedSprite2D:frame")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(-0.6333333, 1.4, 6.8),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [0, 1, 0]
+}
+
+[sub_resource type="Animation" id="Animation_0evpg"]
+resource_name = "space 2"
+length = 2.1333334
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimationPlayer2/AnimatedSprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1.0333333),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [0, 1]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_x2lpg"]
+_data = {
+&"RESET": SubResource("Animation_7vgwd"),
+&"tutorial_1": SubResource("Animation_hoap5"),
+&"tutorial_2": SubResource("Animation_0evpg")
+}
+
 [node name="ClosingComic" type="Node2D" unique_id=354798713]
 script = ExtResource("1_o5tic")
 
@@ -254,6 +357,15 @@ libraries/ = SubResource("AnimationLibrary_ohfap")
 
 [node name="Timer" type="Timer" parent="." unique_id=810301669]
 one_shot = true
+
+[node name="AnimationPlayer2" type="AnimationPlayer" parent="." unique_id=740650677]
+libraries/ = SubResource("AnimationLibrary_x2lpg")
+autoplay = &"tutorial_2"
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="AnimationPlayer2" unique_id=1807992020]
+position = Vector2(438, 250)
+scale = Vector2(2, 2)
+sprite_frames = SubResource("SpriteFrames_8jovo")
 
 [connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_animation_player_animation_finished"]
 [connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

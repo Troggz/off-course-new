@@ -106,6 +106,7 @@ visible = false
 texture = ExtResource("2_bip55")
 
 [node name="Sprite" type="AnimatedSprite2D" parent="." unique_id=139438059]
+light_mask = 2
 sprite_frames = SubResource("SpriteFrames_e34t8")
 autoplay = "default"
 frame_progress = 0.442961

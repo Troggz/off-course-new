@@ -202,6 +202,7 @@ resource_local_to_scene = true
 radius = 12.0
 
 [node name="Player" unique_id=1039897982 groups=["player"] instance=ExtResource("1_symyc")]
+light_mask = 2
 mass = 0.75
 contact_monitor = true
 max_contacts_reported = 1
@@ -216,11 +217,11 @@ unlatching_boost = 1.1
 unlatching_time = 2.0
 arcs = 12
 arc_divisions = 8
-invulnerable_time = 3.0
+invulnerable_time = 1.0
 hurt_radius = 9.0
 point_count = 32
 Can_NWSE = false
-lives = 3
+lives = 2
 knockback_type = 2
 knockback_multiplier = 1.5
 knockback_speed = 150
@@ -236,7 +237,11 @@ slow_speed = 5.0
 break_speed = 200
 break_time = 0.05
 trail_interval = 0.05
+speed_req = 200.0
 radius = 8.0
+
+[node name="StationHolder" parent="." index="0" unique_id=1080173750]
+light_mask = 2
 
 [node name="Sprite" parent="." index="1" unique_id=139438059]
 visible = false
@@ -285,16 +290,19 @@ color = Color(0, 0.8963526, 0.8963524, 1)
 color_ramp = SubResource("Gradient_a1qjk")
 
 [node name="Back" type="Sprite2D" parent="Sprites" index="3" unique_id=1278749285]
+light_mask = 3
 material = SubResource("ShaderMaterial_a1qjk")
 texture = ExtResource("3_bls4j")
 
 [node name="Lupin" type="AnimatedSprite2D" parent="Sprites" index="4" unique_id=1761124449]
+light_mask = 2
 material = SubResource("ShaderMaterial_j3ovn")
 sprite_frames = SubResource("SpriteFrames_ghoj8")
 autoplay = "default"
 flip_h = true
 
 [node name="Front" type="AnimatedSprite2D" parent="Sprites" index="5" unique_id=192324765]
+light_mask = 2
 material = SubResource("ShaderMaterial_afbqv")
 sprite_frames = SubResource("SpriteFrames_eyb6c")
 autoplay = "default"
