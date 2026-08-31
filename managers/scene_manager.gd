@@ -2,9 +2,6 @@ extends Node
 
 
 const LEVELS: Array[String] = [
-	"res://levels/level_tutorial1.tscn",
-	"res://levels/level_tutorial2.tscn",
-	"res://levels/level_0.tscn",
 	"res://levels/level_1.tscn",
 	"res://levels/level_2.tscn",
 	"res://levels/level_3.tscn",
@@ -12,6 +9,9 @@ const LEVELS: Array[String] = [
 	"res://levels/level_5.tscn",
 	"res://levels/level_6.tscn",
 	"res://levels/level_7.tscn",
+	"res://levels/level_8.tscn",
+	"res://levels/level_9.tscn",
+	"res://levels/level_10.tscn",
 ]
 
 const MENU := "res://entities/menu/menu.tscn"
