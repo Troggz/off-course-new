@@ -68,7 +68,7 @@ var trail_timer := 0.0
 
 func _ready() -> void:
 	
-	check = true
+	$Arrow/ArrowSprite.visible = false
 	
 	if Global.lupin == 3:
 		$Sprites/Lupin.play("third")
@@ -168,6 +168,7 @@ func _process(delta: float) -> void:
 			circle.kill()
 			circle = null
 			$Arrow.rotation = 0
+			$Arrow/ArrowSprite.visible = false
 			current_station = null
 		
 		elif dash_type == 1 && can_dash == true:
@@ -184,10 +185,11 @@ func _process(delta: float) -> void:
 				elif slow_application == 2:
 					old_velocity = linear_velocity.length()
 					linear_velocity = linear_velocity.normalized() * slow_speed
+				$Arrow/ArrowSprite.visible = true
 				circle = create_tween()
 				circle.tween_property($Arrow, "rotation", deg_to_rad(360), dash_orbit_time)
 				circle.finished.connect(_on_orbit_finished)
-					
+			
 			else:
 				if circle.is_running():
 					can_dash = false
@@ -200,6 +202,7 @@ func _process(delta: float) -> void:
 						
 					player_direction($Arrow.rotation, dash_application)
 					$Arrow.rotation = 0
+					$Arrow/ArrowSprite.visible = false
 					circle.kill()
 					gravity_switch(true)
 					circle = null
@@ -264,6 +267,7 @@ func _on_orbit_finished() -> void:
 	gravity_switch(true)
 	circle = null
 	$Arrow.rotation = 0
+	$Arrow/ArrowSprite.visible = false
 	
 	if slow_application == 1:
 		linear_velocity /= slow_multiplier
@@ -279,6 +283,7 @@ func interrupt_dash_2() -> void:
 			circle.kill()
 			circle = null
 			$Arrow.rotation = 0
+			$Arrow/ArrowSprite.visible = false
 		gravity_switch(true)
 
 func third_dash(rad: float) -> void:
@@ -551,6 +556,7 @@ func _on_danger_area_area_entered(area: Area2D) -> void:
 			line.hide()
 	
 	unlatch_appearence()
+	$Arrow/ArrowSprite.visible = true
 	circle = create_tween()
 	circle.set_loops()
 	circle.tween_property($Arrow, "rotation", deg_to_rad(360), current_station.orbit_time)
@@ -571,3 +577,4 @@ func _on_danger_area_area_exited(area: Area2D) -> void:
 	if circle:
 		circle.kill()
 		$Arrow.rotation = deg_to_rad(0)
+		$Arrow/ArrowSprite.visible = false

@@ -1,7 +1,17 @@
-[gd_scene format=3 uid="uid://dgacp7ey57ftx"]
+[gd_scene format=4 uid="uid://dgacp7ey57ftx"]
 
 [ext_resource type="Script" uid="uid://7maoexoto6rj" path="res://entities/break_wall/breakwallbox.gd" id="1_8ovyv"]
-[ext_resource type="TileSet" uid="uid://c5uikkyewmdrs" path="res://entities/break_wall/breakablewall.tres" id="2_8ovyv"]
+[ext_resource type="Texture2D" uid="uid://5rvpfxigjih7" path="res://entities/break_wall/breakable tile.png" id="2_2qohj"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_mrs0o"]
+texture = ExtResource("2_2qohj")
+0:0/0 = 0
+0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+
+[sub_resource type="TileSet" id="TileSet_mhxt3"]
+physics_layer_0/collision_layer = 5
+physics_layer_0/collision_mask = 5
+sources/0 = SubResource("TileSetAtlasSource_mrs0o")
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_5cm8l"]
 
@@ -13,10 +23,11 @@ point_count = 2
 collision_layer = 0
 collision_mask = 0
 script = ExtResource("1_8ovyv")
+tile_size = Vector2i(4, 4)
 
 [node name="TileMapLayer" type="TileMapLayer" parent="." unique_id=1503344398]
-tile_map_data = PackedByteArray(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
-tile_set = ExtResource("2_8ovyv")
+tile_map_data = PackedByteArray("AAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAACAAAAAAAAAAAAAAADAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAABAAEAAAAAAAAAAAACAAEAAAAAAAAAAAADAAEAAAAAAAAAAAAAAAIAAAAAAAAAAAABAAIAAAAAAAAAAAACAAIAAAAAAAAAAAADAAIAAAAAAAAAAAAAAAMAAAAAAAAAAAABAAMAAAAAAAAAAAACAAMAAAAAAAAAAAADAAMAAAAAAAAAAAAAAAQAAAAAAAAAAAABAAQAAAAAAAAAAAACAAQAAAAAAAAAAAADAAQAAAAAAAAAAAAEAAAAAAAAAAAAAAAEAAEAAAAAAAAAAAAEAAIAAAAAAAAAAAAEAAMAAAAAAAAAAAAEAAQAAAAAAAAAAAA=")
+tile_set = SubResource("TileSet_mhxt3")
 navigation_enabled = false
 metadata/_edit_lock_ = true
 
@@ -27,7 +38,7 @@ shape = SubResource("RectangleShape2D_5cm8l")
 disabled = true
 
 [node name="CPUParticles2D" type="CPUParticles2D" parent="." unique_id=1989874630]
-position = Vector2(8, 8)
+position = Vector2(40, 40)
 emitting = false
 amount = 100
 lifetime = 4.0
@@ -35,7 +46,7 @@ one_shot = true
 explosiveness = 1.0
 lifetime_randomness = 1.0
 emission_shape = 3
-emission_rect_extents = Vector2(8, 8)
+emission_rect_extents = Vector2(40, 40)
 direction = Vector2(0, 0)
 spread = 180.0
 gravity = Vector2(0, 0)
@@ -45,4 +56,9 @@ angular_velocity_min = 50.0
 angular_velocity_max = 200.0
 scale_amount_max = 5.0
 scale_amount_curve = SubResource("Curve_5cm8l")
-color = Color(0.22959325, 0.22959325, 0.22959322, 1)
+color = Color(0.11371524, 0.10861137, 0.4516911, 1)
+
+[node name="Outline" type="Line2D" parent="." unique_id=1172136764]
+points = PackedVector2Array(0, -1.5, 0, 80, 80, 80, 80, 0, 0, 0)
+width = 1.0
+default_color = Color(0.11372549, 0.10980392, 0.4509804, 1)

@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://biotlhx7rd3hp"]
 
 [ext_resource type="Script" uid="uid://75hh5amqsrp7" path="res://entities/orb/orb.gd" id="1_4ogyp"]
+[ext_resource type="Texture2D" uid="uid://chsmfbyp0rldd" path="res://entities/orb/station.png" id="2_bip55"]
 [ext_resource type="Texture2D" uid="uid://f7i2gsgexdih" path="res://entities/orb/orb.png" id="2_h8qx5"]
 [ext_resource type="AudioStream" uid="uid://cnjslpvysqpri" path="res://entities/orb/bounce.wav" id="3_ulscp"]
 [ext_resource type="AudioStream" uid="uid://d3olnmo84qmhm" path="res://entities/orb/orbit.wav" id="4_b6827"]
@@ -91,12 +92,17 @@ gravity_scale = 0.0
 lock_rotation = true
 script = ExtResource("1_4ogyp")
 
+[node name="StationHolder" type="Sprite2D" parent="." unique_id=1080173750]
+visible = false
+texture = ExtResource("2_bip55")
+
 [node name="Sprite" type="AnimatedSprite2D" parent="." unique_id=139438059]
 sprite_frames = SubResource("SpriteFrames_e34t8")
 autoplay = "default"
 frame_progress = 0.442961
 
 [node name="CollisionShape" type="CollisionShape2D" parent="." unique_id=806147550]
+visible = false
 shape = SubResource("CircleShape2D_cbh67")
 
 [node name="BounceAudio" type="AudioStreamPlayer2D" parent="." unique_id=1415125308]

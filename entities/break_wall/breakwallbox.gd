@@ -45,6 +45,10 @@ extends StaticBody2D
 		
 		tile_map.clear()
 		
+		$Outline.set_point_position(1, Vector2(0, (tile_size.y + 1) * 16))
+		$Outline.set_point_position(2, Vector2((tile_size.x + 1) * 16, (tile_size.y + 1) * 16))
+		$Outline.set_point_position(3, Vector2((tile_size.x + 1) * 16, 0))
+		
 		# Draw top cells
 		tile_map.set_cell(Vector2i(0, 0), 0, Vector2i(0,0))
 		for x in range(tile_size.x):
@@ -72,7 +76,12 @@ var broke := false:
 
 func break_wall() -> void:
 	tile_map.clear()
+	$Outline.clear_points()
 	$CPUParticles2D.emitting = true
+	await $CPUParticles2D.finished
+
+	if is_instance_valid(self):
+		queue_free()
 	#get_tree().create_timer(0.025, true, false, false).timeout
 	return
 	

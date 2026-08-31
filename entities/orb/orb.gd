@@ -26,15 +26,20 @@ var latched := false
 
 var color: Color:
 	get:
+		
 		var h := intensity / 2.5
 		var s := lerpf(0.7, 0.0, inverse_lerp(48.0, 96.0, preferred_radius))
 		var v := 1.0
 		var rgb := Color.from_hsv(h, s, v)
-		if deadly:
+		
+		if station == true:
+			rgb = Color.from_hsv(0, 0, 0)
+		
+		if deadly == true && station == false:
 			rgb = lerp(rgb, Color(1.0, rgb.g / 2.0, rgb.b / 2.0), sin(time * PI * 2.0) / 2.0 + 0.5)
 		else:
 			rgb = lerp(rgb, rgb.darkened(0.2), sin(time * PI * 4.0) / 2.0 + 0.5)
-
+				
 		return rgb
 
 func _ready():
@@ -47,9 +52,9 @@ func _ready():
 		set_collision_layer_value(1, false)
 		$Area2D/CollisionShape2D.disabled = false
 		$Area2D/CollisionShape2D.shape.radius = station_radius
+		$StationHolder.visible = true
 		#print("coll area ", $Area2D.get_collision_layer_value(3))
-	
-	contact_monitor = true
+
 
 var time := 0.0
 func _process(delta: float) -> void:
